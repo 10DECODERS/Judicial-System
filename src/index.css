@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Modern Justice Palette - Option 5 */
+    --background: 40 33% 96%;
+    --foreground: 227 33% 16%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 214 17% 35%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 227 33% 16%;
+
+    --primary: 220 53% 18%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 220 53% 18%;
+
+    --muted: 40 50% 99%;
+    --muted-foreground: 214 14% 52%;
+
+    --accent: 357 77% 67%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 65% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 85%;
+    --ring: 357 77% 67%;
+
+    --radius: 0.5rem;
+
+    /* Modern Justice color system */
+    --court-navy: 220 53% 18%;
+    --court-navy-light: 220 48% 24%;
+    --court-gold: 357 77% 67%;
+    --court-gold-hover: 357 77% 60%;
+    --court-gold-active: 357 77% 72%;
+    --court-cream: 40 33% 96%;
+    --court-gray-light: 220 13% 91%;
+    --court-gray: 220 13% 85%;
+    
+    /* Role-specific accent colors */
+    --judge-accent: 357 77% 67%;
+    --clerk-accent: 357 77% 67%;
+    --admin-accent: 357 77% 67%;
+
+    /* Success/Status colors */
+    --success: 160 84% 39%;
+    --success-light: 151 81% 90%;
+
+    --sidebar-background: 220 53% 18%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 357 77% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 48% 24%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 53% 22%;
+    --sidebar-ring: 357 77% 67%;
+  }
+
+  .dark {
+    --background: 220 53% 12%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 53% 16%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 53% 16%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 220 48% 24%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 53% 20%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 53% 18%;
+    --muted-foreground: 214 14% 65%;
+
+    --accent: 357 77% 67%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 53% 22%;
+    --input: 220 53% 22%;
+    --ring: 357 77% 67%;
+    
+    --sidebar-background: 220 53% 14%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 357 77% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 53% 20%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 53% 18%;
+    --sidebar-ring: 357 77% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 18px; /* Increased base font size */
+    line-height: 1.6;
+    margin-left: 120px;
+    margin-right: 120px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 3.5rem; /* Increased from default */
+  }
+
+  h2 {
+    font-size: 2.5rem; /* Increased from default */
+  }
+
+  h3 {
+    font-size: 2rem; /* Increased from default */
+  }
+
+  h4 {
+    font-size: 1.5rem; /* Increased from default */
+  }
+
+  h5 {
+    font-size: 1.25rem; /* Increased from default */
+  }
+
+  h6 {
+    font-size: 1.125rem; /* Increased from default */
+  }
+
+  p {
+    font-size: 1.125rem; /* Increased paragraph text */
+    line-height: 1.7;
+  }
+
+  small, .text-sm {
+    font-size: 1rem; /* Increased small text */
+  }
+
+  .text-xs {
+    font-size: 0.875rem; /* Increased extra small text */
+  }
+}
+
+@layer utilities {
+  /* Modern Justice gradients */
+  .court-gradient {
+    @apply bg-gradient-to-b from-primary to-[hsl(220,53%,16%)];
+  }
+
+  .court-gold-gradient {
+    @apply bg-gradient-to-r from-accent via-accent/90 to-accent/80;
+  }
+
+  .court-hero {
+    @apply bg-gradient-to-br from-primary to-[hsl(220,53%,16%)];
+  }
+
+  /* Professional card effects */
+  .court-card {
+    @apply bg-card border-l-4 border-l-accent rounded-lg;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-hover {
+    @apply rounded-lg;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-sm bg-card/95 dark:bg-card/90 border border-border rounded-lg;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Modern status badges */
+  .status-draft {
+    @apply bg-yellow-50 text-yellow-800 border border-yellow-200 dark:bg-yellow-950/30 dark:text-yellow-300 dark:border-yellow-800/50;
+  }
+
+  .status-submitted {
+    @apply bg-blue-50 text-blue-800 border border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800/50;
+  }
+
+  .status-approved {
+    @apply bg-[hsl(151,81%,90%)] text-[hsl(160,84%,39%)] border border-[hsl(160,84%,39%)]/20;
+  }
+
+  /* Justice-themed background patterns */
+  .justice-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 50%, hsl(var(--accent)) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(var(--accent)) 0%, transparent 50%);
+    opacity: 0.05;
+  }
+
+  /* Professional animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
