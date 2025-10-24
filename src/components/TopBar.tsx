@@ -49,8 +49,16 @@ export const TopBar = () => {
   return (
     <header className="h-20 border-b border-border bg-card shadow-sm">
       <div className="flex items-center justify-between h-full px-6">
-        {/* Search */}
-        <div className="flex items-center gap-6 flex-1">
+        {/* Logo and Navigation */}
+        <div className="flex items-center gap-6">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <img src="./public/judicial-removebg-preview.png" alt="Judicial System Logo" className="w-12 h-12 object-contain" />
+            <div className="hidden md:block">
+              <h1 className="text-lg font-semibold text-foreground">Judicial AI Suite</h1>
+              <p className="text-xs text-muted-foreground">Court Management</p>
+            </div>
+          </div>
 
           {/* Navigation Menu */}
           <nav className="hidden md:flex items-center gap-2">
@@ -101,6 +109,11 @@ export const TopBar = () => {
               })}
             </DropdownMenuContent>
           </DropdownMenu>
+
+        </div>
+
+        {/* Search */}
+        <div className="flex items-center gap-6 flex-1">
 
           {/* Search */}
           <div className="relative flex-1 max-w-md">
