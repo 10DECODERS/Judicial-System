@@ -53,7 +53,7 @@ export const TopBar = () => {
         <div className="flex items-center gap-6">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src="./public/judicial-removebg-preview.png" alt="Judicial System Logo" className="w-12 h-12 object-contain" />
+            <img src="/judicial-removebg-preview.png" alt="Judicial System Logo" className="w-12 h-12 object-contain" />
             <div className="hidden md:block">
               <h1 className="text-lg font-semibold text-foreground">Judicial AI Suite</h1>
               <p className="text-xs text-muted-foreground">Court Management</p>
