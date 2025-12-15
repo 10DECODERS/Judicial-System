@@ -50,10 +50,12 @@ export const TopBar = ({ toggleSidebar, isSidebarCollapsed }: TopBarProps) => {
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full">
-          <Bell className="w-5 h-5" strokeWidth={3} />
+          <Bell className="w-6 h-6" strokeWidth={2.5} />
           <Badge
-            className="absolute top-2 right-2 w-2 h-2 p-0 bg-red-500 rounded-full border-2 border-primary"
-          />
+            className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-[10px] bg-red-500 text-white rounded-full border-2 border-primary"
+          >
+            2
+          </Badge>
         </Button>
 
         {/* Separator */}

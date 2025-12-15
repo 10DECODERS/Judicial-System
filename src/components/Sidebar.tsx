@@ -59,9 +59,7 @@ export const Sidebar = ({ isCollapsed }: SidebarProps) => {
 
       {/* Navigation */}
       <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
-        <div className="mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          {!isCollapsed && "Menu"}
-        </div>
+
 
         {menuItems.map((item) => (
           <NavLink
@@ -71,7 +69,7 @@ export const Sidebar = ({ isCollapsed }: SidebarProps) => {
             className={({ isActive }) =>
               cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative",
-                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                !isActive && "hover:text-primary",
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm font-medium"
                   : "text-muted-foreground"
