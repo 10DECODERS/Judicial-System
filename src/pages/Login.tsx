@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!username || !password) {
       toast({
         title: "Error",
@@ -38,7 +38,7 @@ const Login = () => {
     }
 
     const success = login(username, password, role);
-    
+
     if (success) {
       toast({
         title: "Welcome",
@@ -55,10 +55,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen court-hero flex items-center justify-center p-4 relative overflow-hidden -ml-[120px] -mr-[120px]">
+    <div className="h-screen court-hero flex items-center justify-center p-4 relative overflow-hidden">
       {/* Justice pattern background */}
       <div className="absolute inset-0 justice-pattern pointer-events-none" />
-      
+
       <Card className="w-full max-w-md shadow-2xl border-t-4 border-t-accent relative z-10 glass-card">
         <CardHeader className="text-center space-y-4 pb-8">
           <div className="flex justify-center mb-4">
@@ -118,7 +118,7 @@ const Login = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full court-gold-gradient hover:opacity-90 transition-opacity" size="lg">
+            <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-opacity" size="lg">
               <LogIn className="w-4 h-4 mr-2" />
               Login to Court System
             </Button>

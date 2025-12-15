@@ -1,5 +1,4 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { TopBar } from '@/components/TopBar';
 import { AIAssistant } from '@/components/AIAssistant';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,21 +11,16 @@ import TranscriptView from './clerk/TranscriptView';
 
 const ClerkDashboard = () => {
   return (
-    <div className="flex h-screen w-full bg-background flex-col">
-      <TopBar />
-
-      <main className="flex-1 overflow-auto">
-        <Routes>
-          <Route path="/" element={<ClerkDashboardHome />} />
-          <Route path="/transcription" element={<TranscriptionControl />} />
-          <Route path="/transcription-records" element={<TranscriptionRecords />} />
-          <Route path="/transcript-view/:recordId" element={<TranscriptView />} />
-          <Route path="/*" element={<div className="p-8 text-center text-muted-foreground">Module coming soon</div>} />
-        </Routes>
-      </main>
-
+    <>
+      <Routes>
+        <Route path="/" element={<ClerkDashboardHome />} />
+        <Route path="/transcription" element={<TranscriptionControl />} />
+        <Route path="/transcription-records" element={<TranscriptionRecords />} />
+        <Route path="/transcript-view/:recordId" element={<TranscriptView />} />
+        <Route path="/*" element={<div className="p-8 text-center text-muted-foreground">Module coming soon</div>} />
+      </Routes>
       <AIAssistant />
-    </div>
+    </>
   );
 };
 
@@ -34,12 +28,12 @@ const ClerkDashboardHome = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-8 animate-fade-in">
+    <div className="bg-gradient-to-br from-background to-muted/20 p-8 animate-fade-in">
       {/* Hero Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-2 tracking-tight">
+            <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">
               Clerk's Office
             </h1>
             <p className="text-lg text-muted-foreground">Court transcription management and record keeping system.</p>
@@ -123,7 +117,7 @@ const ClerkDashboardHome = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Quick Access Modules */}
         <div>
-          <h2 className="text-2xl md:text-3xl font-display font-semibold mb-3 text-foreground">Quick Access</h2>
+          <h2 className="text-2xl font-display font-semibold mb-4 text-foreground">Quick Access</h2>
           <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-teal-50/50 to-teal-100/30 dark:from-teal-950/20 dark:to-teal-900/20" onClick={() => navigate('/clerk/transcription')}>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-4">
@@ -163,7 +157,7 @@ const ClerkDashboardHome = () => {
 
         {/* Active Sessions */}
         <div>
-          <h3 className="text-xl font-display font-semibold mb-4 text-foreground">Active Sessions</h3>
+          <h3 className="text-2xl font-display font-semibold mb-4 text-foreground">Active Sessions</h3>
           <Card className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 dark:from-indigo-950/20 dark:to-indigo-900/20">
             <CardContent className="p-6">
               <div className="space-y-4">
@@ -342,19 +336,18 @@ const ClerkDashboardHome = () => {
         </Card>
       </div>
 
-      {/* AI Advisory Notice */}
-      <Card className="border-l-4 border-l-yellow-500 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-4 text-2xl">
-            <span className="text-3xl">⚖️</span>
-            AI Advisory Notice
+      {/* Judicial Advisory Notice */}
+      <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mb-8">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-3 text-xl text-foreground">
+            <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-500" />
+            Judicial Advisory Notice
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800/50 rounded-lg p-8">
-            <p className="text-lg text-yellow-900 dark:text-yellow-100 leading-relaxed">
-              <strong className="font-semibold text-xl">Advisory Only:</strong> All AI-generated transcriptions and content are provided as advisory tools only.
-              Final legal decisions and official records remain with the presiding officers and certified court reporters. AI assistance should supplement, not replace, human oversight and verification.
+          <div className="bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-6">
+            <p className="text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
+              <strong className="font-semibold text-amber-900 dark:text-amber-100">Advisory Only:</strong> This AI-powered transcription and record management system provides automated drafts for efficiency. All transcripts must be certified by an official court reporter and reviewed for accuracy against the official audio record before becoming part of the permanent judicial record. Automated outputs are tools to assist, not replace, certified verification.
             </p>
           </div>
         </CardContent>

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, FileText, BookOpen, Calendar, Filter, ChevronRight, Star, Clock, TrendingUp, Users, MapPin , MessageCircle, X, Send, Download} from 'lucide-react';
+import { Search, FileText, BookOpen, Calendar, Filter, ChevronRight, Star, Clock, TrendingUp, Users, MapPin, MessageCircle, X, Send, Download, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Mock data for comprehensive legal research
@@ -412,9 +412,9 @@ export default function LegalResearchPage() {
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
-                  <p className="text-xs text-muted-foreground mt-2 text-center">
-                    AI responses are advisory only
-                  </p>
+                <p className="text-xs text-muted-foreground mt-2 text-center">
+                  AI responses are advisory only
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -476,6 +476,22 @@ export default function LegalResearchPage() {
             ))}
           </div>
         </div>
+        {/* Judicial Advisory Notice */}
+        <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mt-8 mb-8">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-3 text-xl text-foreground">
+              <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />
+              Judicial Advisory Notice
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-6">
+              <p className="text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
+                <strong className="font-semibold text-amber-900 dark:text-amber-100">Advisory Only:</strong> This AI-powered legal research assistant provides search results, case summaries, and analytical insights for informational purposes only. All research findings must be verified by qualified legal professionals, reviewed for current applicability to specific facts and jurisdictions, and cross-referenced with primary legal sources before any judicial application or decision-making. The automated analysis and recommendations are not a substitute for professional legal judgment.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -485,10 +501,10 @@ export default function LegalResearchPage() {
       {/* Header */}
       <div className="text-left mb-8">
         <div className="absolute inset-0 justice-pattern -z-10 opacity-30" />
-        <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3 tracking-tight">
+        <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">
           Legal Research Assistant
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+        <p className="text-lg text-muted-foreground leading-relaxed">
           Advanced AI-powered legal research with comprehensive case law analysis and statutory references
         </p>
       </div>
@@ -687,8 +703,8 @@ export default function LegalResearchPage() {
                   <ScrollArea className="h-[800px]">
                     <div className="space-y-4">
                       {currentResults.map((caseItem) => (
-                        <Card 
-                          key={caseItem.id} 
+                        <Card
+                          key={caseItem.id}
                           className="court-card hover:shadow-lg transition-all cursor-pointer"
                           onClick={() => handleCaseClick(caseItem)}
                         >
@@ -958,20 +974,18 @@ export default function LegalResearchPage() {
         </div>
       </div>
 
-      {/* Legal Advisory Notice */}
-      <Card className="border-l-4 border-l-yellow-500 mt-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-4 text-2xl">
-            <span className="text-3xl">⚖️</span>
+      {/* Judicial Advisory Notice */}
+      <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mt-8">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-3 text-xl text-foreground">
+            <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />
             Judicial Advisory Notice
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800/50 rounded-lg p-8">
-            <p className="text-lg text-yellow-900 dark:text-yellow-100 leading-relaxed">
-              <strong className="font-semibold text-xl">Advisory Only:</strong> This AI-powered legal research assistant provides search results, case summaries, and analytical insights for informational purposes only.
-              All research findings must be verified by qualified legal professionals, reviewed for current applicability to specific facts and jurisdictions, and cross-referenced with primary legal sources before any judicial application or decision-making.
-              The automated analysis and recommendations are not a substitute for professional legal judgment.
+          <div className="bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-6">
+            <p className="text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
+              <strong className="font-semibold text-amber-900 dark:text-amber-100">Advisory Only:</strong> This AI-powered legal research assistant provides search results, case summaries, and analytical insights for informational purposes only. All research findings must be verified by qualified legal professionals, reviewed for current applicability to specific facts and jurisdictions, and cross-referenced with primary legal sources before any judicial application or decision-making. The automated analysis and recommendations are not a substitute for professional legal judgment.
             </p>
           </div>
         </CardContent>

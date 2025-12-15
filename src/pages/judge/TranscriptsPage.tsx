@@ -72,8 +72,8 @@ export default function TranscriptsPage() {
       <div className="mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-display font-semibold text-headings mb-2">Courtroom Transcripts</h1>
-            <p className="text-sm text-body">View and review completed courtroom transcription records</p>
+            <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">Courtroom Transcripts</h1>
+            <p className="text-lg text-muted-foreground">View and review completed courtroom transcription records</p>
           </div>
           <div className="flex items-center gap-3">
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
@@ -81,9 +81,9 @@ export default function TranscriptsPage() {
                 <Globe className="w-4 h-4 mr-2" />
                 <SelectValue>
                   {selectedLanguage === 'multiple' ? 'Multiple Languages' :
-                   selectedLanguage === 'en' ? 'English' :
-                   selectedLanguage === 'hi' ? 'हिंदी' :
-                   selectedLanguage === 'ar' ? 'العربية' : 'Multiple Languages'}
+                    selectedLanguage === 'en' ? 'English' :
+                      selectedLanguage === 'hi' ? 'हिंदी' :
+                        selectedLanguage === 'ar' ? 'العربية' : 'Multiple Languages'}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -191,119 +191,119 @@ export default function TranscriptsPage() {
               </TableHeader>
               <TableBody>
                 {paginatedRecords.map((record) => (
-                    <TableRow key={record.id} className="hover:bg-accent/5 transition-colors">
-                      <TableCell className="font-medium text-body">{record.caseNumber}</TableCell>
-                      <TableCell>
-                        <div className="max-w-xs truncate text-body" title={record.caseTitle}>
-                          {record.caseTitle}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-body">
-                        {new Date(record.date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2 text-body">
-                          <Clock className="w-4 h-4 text-accent" />
-                          {record.duration}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={
-                          record.language === 'en' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                  <TableRow key={record.id} className="hover:bg-accent/5 transition-colors">
+                    <TableCell className="font-medium text-body">{record.caseNumber}</TableCell>
+                    <TableCell>
+                      <div className="max-w-xs truncate text-body" title={record.caseTitle}>
+                        {record.caseTitle}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-body">
+                      {new Date(record.date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 text-body">
+                        <Clock className="w-4 h-4 text-accent" />
+                        {record.duration}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={
+                        record.language === 'en' ? 'bg-blue-50 text-blue-700 border-blue-200' :
                           record.language === 'hi' ? 'bg-orange-50 text-orange-700 border-orange-200' :
-                          record.language === 'ar' ? 'bg-green-50 text-green-700 border-green-200' :
-                          'bg-gray-50 text-gray-700 border-gray-200'
-                        }>
-                          {record.language === 'en' ? 'English' :
-                           record.language === 'hi' ? 'हिंदी' :
-                           record.language === 'ar' ? 'العربية' : 'Unknown'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-body">{record.clerkName}</TableCell>
-                      <TableCell className="text-sm text-body">
-                        {record.fileSize}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewTranscript(record.id)}
-                          className="h-8 w-8 p-0 border-borders hover:bg-accent/10 transition-all"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            record.language === 'ar' ? 'bg-green-50 text-green-700 border-green-200' :
+                              'bg-gray-50 text-gray-700 border-gray-200'
+                      }>
+                        {record.language === 'en' ? 'English' :
+                          record.language === 'hi' ? 'हिंदी' :
+                            record.language === 'ar' ? 'العربية' : 'Unknown'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-body">{record.clerkName}</TableCell>
+                    <TableCell className="text-sm text-body">
+                      {record.fileSize}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewTranscript(record.id)}
+                        className="h-8 w-8 p-0 border-borders hover:bg-accent/10 transition-all"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-4">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage(prev => Math.max(prev - 1, 1));
-                        }}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                      if (
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1)
-                      ) {
-                        return (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setCurrentPage(page);
-                              }}
-                              isActive={currentPage === page}
-                              className="cursor-pointer"
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
-                      } else if (
-                        (page === currentPage - 2 && page > 1) ||
-                        (page === currentPage + 2 && page < totalPages)
-                      ) {
-                        return (
-                          <PaginationItem key={page}>
-                            <span className="px-2">...</span>
-                          </PaginationItem>
-                        );
-                      }
-                      return null;
-                    })}
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                        }}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-                <p className="text-sm text-body text-center mt-2">
-                  Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
-                </p>
-              </div>
-            )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(prev => Math.max(prev - 1, 1));
+                      }}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setCurrentPage(page);
+                            }}
+                            isActive={currentPage === page}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    } else if (
+                      (page === currentPage - 2 && page > 1) ||
+                      (page === currentPage + 2 && page < totalPages)
+                    ) {
+                      return (
+                        <PaginationItem key={page}>
+                          <span className="px-2">...</span>
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  })}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                      }}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              <p className="text-sm text-body text-center mt-2">
+                Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+              </p>
+            </div>
+          )}
 
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
 
       {/* Read-Only Notice */}
       <Card className="border-accent/20 bg-accent/5">

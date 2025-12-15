@@ -51,24 +51,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        court: {
-          navy: "hsl(var(--court-navy))",
-          "navy-light": "hsl(var(--court-navy-light))",
-          gold: "hsl(var(--court-gold))",
-          "gold-light": "hsl(var(--court-gold-light))",
-          cream: "hsl(var(--court-cream))",
-          "gray-light": "hsl(var(--court-gray-light))",
-          gray: "hsl(var(--court-gray))",
-        },
-        judge: {
-          accent: "hsl(var(--judge-accent))",
-        },
-        clerk: {
-          accent: "hsl(var(--clerk-accent))",
-        },
-        admin: {
-          accent: "hsl(var(--admin-accent))",
-        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -78,6 +60,7 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
+          active: "hsl(var(--sidebar-active))",
         },
       },
       borderRadius: {

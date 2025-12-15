@@ -5,7 +5,11 @@ import {
   Mic,
   BookOpen,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Settings,
+  Files,
+  Users,
+  Search
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -27,55 +31,59 @@ export const Sidebar = () => {
 
   const menuItems =
     user?.role === 'judge' ? judgeMenuItems :
-    user?.role === 'clerk' ? clerkMenuItems :
-    [];
+      user?.role === 'clerk' ? clerkMenuItems :
+        [];
 
   return (
     <aside
       className={cn(
-        "h-screen bg-primary text-white border-r border-primary/20 transition-all duration-300 flex flex-col shadow-2xl relative overflow-hidden",
-        isCollapsed ? "w-16" : "w-64",
-        "before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/5 before:to-transparent before:pointer-events-none"
+        "h-screen bg-sidebar text-sidebar-foreground border-r border-border flex flex-col transition-all duration-300 relative z-20",
+        isCollapsed ? "w-20" : "w-64"
       )}
     >
-      <div className="p-4 border-b border-white/10 flex justify-end relative z-10 backdrop-blur-sm bg-primary/95">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 hover:bg-white/15 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-        >
-          {isCollapsed ? (
-            <ChevronRight className="w-4 h-4 text-white" />
-          ) : (
-            <ChevronLeft className="w-4 h-4 text-white" />
-          )}
-        </button>
+      {/* Logo Area */}
+      <div className="h-20 flex items-center px-6 bg-primary border-b border-primary-foreground/10">
+        <div className="flex items-center gap-3 overflow-hidden">
+          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+            <img src="/judicial-removebg-preview.png" alt="Logo" className="w-6 h-6 object-contain brightness-0 invert" />
+          </div>
+          <div className={cn("flex flex-col transition-opacity duration-300", isCollapsed ? "opacity-0 w-0" : "opacity-100")}>
+            <span className="font-bold text-lg leading-none tracking-tight text-primary-foreground">Judicial</span>
+            <span className="text-xs text-primary-foreground/70 font-medium">AI Suite</span>
+          </div>
+        </div>
       </div>
 
-      <nav className="flex-1 p-3 space-y-2 overflow-y-auto relative z-10">
-        {menuItems.map((item, index) => (
+      {/* Navigation */}
+      <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+        <div className="mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          {!isCollapsed && "Menu"}
+        </div>
+
+        {menuItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             end
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
-                "hover:bg-white/15 hover:shadow-lg hover:scale-[1.02]",
-                "before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/10 before:to-white/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
-                isActive && "bg-accent/90 text-white font-medium shadow-lg border border-accent/50",
-                !isActive && "text-white/80 hover:text-white"
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative",
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-sm font-medium"
+                  : "text-muted-foreground"
               )
             }
-            style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="relative z-10 flex items-center justify-center w-5 h-5">
-              <item.icon className="w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-110" />
-            </div>
+            <item.icon className={cn("w-5 h-5 flex-shrink-0", isCollapsed && "mx-auto")} />
+
             {!isCollapsed && (
-              <span className="text-sm font-medium relative z-10">{item.label}</span>
+              <span>{item.label}</span>
             )}
+
+            {/* Tooltip for collapsed state */}
             {isCollapsed && (
-              <div className="absolute left-16 top-1/2 -translate-y-1/2 px-2 py-1 bg-primary/95 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+              <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 pointer-events-none border">
                 {item.label}
               </div>
             )}
@@ -83,13 +91,22 @@ export const Sidebar = () => {
         ))}
       </nav>
 
-      {!isCollapsed && (
-        <div className="p-4 border-t border-white/10 relative z-10 backdrop-blur-sm bg-primary/95">
-          <div className="text-xs text-white/60 text-center font-medium">
-to            © 2025 Judicial AI Suite
-          </div>
-        </div>
-      )}
+      {/* Footer / Toggle */}
+      <div className="p-4 border-t border-border/50">
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-sidebar-accent text-muted-foreground transition-colors"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="w-5 h-5" />
+          ) : (
+            <div className="flex items-center gap-2 text-sm font-medium">
+              <ChevronLeft className="w-4 h-4" />
+              <span>Collapse Sidebar</span>
+            </div>
+          )}
+        </button>
+      </div>
     </aside>
   );
 };
