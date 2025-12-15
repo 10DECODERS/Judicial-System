@@ -108,7 +108,7 @@ const JudgeDashboardHome = () => {
       {/* Today's Schedule */}
       <div className="mb-8">
         <h3 className="text-2xl font-display font-semibold mb-4 text-foreground">Today's Schedule</h3>
-        <Card className="bg-gradient-to-br from-slate-50/50 to-slate-100/30 dark:from-slate-950/20 dark:to-slate-900/20">
+        <Card className="bg-card">
           <CardContent className="p-6">
             <div className="space-y-4">
               <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/50 rounded-lg border border-blue-200/50">
@@ -146,7 +146,7 @@ const JudgeDashboardHome = () => {
 
       {/* Recent Cases & Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 dark:from-indigo-950/20 dark:to-indigo-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
@@ -180,7 +180,7 @@ const JudgeDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-rose-50/50 to-rose-100/30 dark:from-rose-950/20 dark:to-rose-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5 text-rose-600 dark:text-rose-400" />
@@ -225,7 +225,7 @@ const JudgeDashboardHome = () => {
       </div>
 
       {/* Judicial Advisory Notice */}
-      <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mb-8">
+      <Card className="court-card border-l-amber-500/80 bg-card mb-8">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-3 text-xl text-foreground">
             <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />

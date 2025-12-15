@@ -106,7 +106,7 @@ const ClerkDashboardHome = () => {
         {/* Quick Access Modules */}
         <div>
           <h2 className="text-2xl font-display font-semibold mb-4 text-foreground">Quick Access</h2>
-          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-teal-50/50 to-teal-100/30 dark:from-teal-950/20 dark:to-teal-900/20" onClick={() => navigate('/clerk/transcription')}>
+          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-card" onClick={() => navigate('/clerk/transcription')}>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
@@ -146,7 +146,7 @@ const ClerkDashboardHome = () => {
         {/* Active Sessions */}
         <div>
           <h3 className="text-2xl font-display font-semibold mb-4 text-foreground">Active Sessions</h3>
-          <Card className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 dark:from-indigo-950/20 dark:to-indigo-900/20">
+          <Card className="bg-card">
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-200/50">
@@ -178,7 +178,7 @@ const ClerkDashboardHome = () => {
 
       {/* Recent Records & Quality Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-gradient-to-br from-purple-50/50 to-purple-100/30 dark:from-purple-950/20 dark:to-purple-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -221,7 +221,7 @@ const ClerkDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50/50 to-orange-100/30 dark:from-orange-950/20 dark:to-orange-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -267,7 +267,7 @@ const ClerkDashboardHome = () => {
 
       {/* System Status & Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 dark:from-emerald-950/20 dark:to-emerald-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -294,7 +294,7 @@ const ClerkDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-50/50 to-slate-100/30 dark:from-slate-950/20 dark:to-slate-900/20">
+        <Card className="bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5 text-slate-600 dark:text-slate-400" />
@@ -325,7 +325,7 @@ const ClerkDashboardHome = () => {
       </div>
 
       {/* Judicial Advisory Notice */}
-      <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mb-8">
+      <Card className="court-card border-l-amber-500/80 bg-card mb-8">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-3 text-xl text-foreground">
             <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-500" />

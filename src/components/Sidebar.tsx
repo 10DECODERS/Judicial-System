@@ -25,8 +25,11 @@ const clerkMenuItems = [
   { icon: Mic, label: 'Transcription Control', path: '/clerk/transcription' },
 ];
 
-export const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+interface SidebarProps {
+  isCollapsed: boolean;
+}
+
+export const Sidebar = ({ isCollapsed }: SidebarProps) => {
   const { user } = useAuth();
 
   const menuItems =
@@ -90,23 +93,6 @@ export const Sidebar = () => {
           </NavLink>
         ))}
       </nav>
-
-      {/* Footer / Toggle */}
-      <div className="p-4 border-t border-border/50">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-sidebar-accent text-muted-foreground transition-colors"
-        >
-          {isCollapsed ? (
-            <ChevronRight className="w-5 h-5" />
-          ) : (
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <ChevronLeft className="w-4 h-4" />
-              <span>Collapse Sidebar</span>
-            </div>
-          )}
-        </button>
-      </div>
     </aside>
   );
 };
