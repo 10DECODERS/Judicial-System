@@ -49,66 +49,54 @@ const ClerkDashboardHome = () => {
 
       {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950 dark:to-cyan-900 border-cyan-200 dark:border-cyan-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-cyan-600 dark:text-cyan-400">Active Sessions</p>
-                <p className="text-3xl font-bold text-cyan-900 dark:text-cyan-100">3</p>
-              </div>
-              <Headphones className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-cyan-50 dark:bg-cyan-900/20 flex items-center justify-center mb-3">
+              <Headphones className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={75} className="h-2 [&>div]:bg-cyan-500" />
-              <p className="text-xs text-cyan-600 dark:text-cyan-400 mt-2">2 courtrooms in session</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Active Sessions</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">3</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300">Live</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900 border-emerald-200 dark:border-emerald-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Completed Today</p>
-                <p className="text-3xl font-bold text-emerald-900 dark:text-emerald-100">12</p>
-              </div>
-              <FileCheck className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-3">
+              <FileCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={80} className="h-2 [&>div]:bg-emerald-500" />
-              <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">8 ready for review</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Completed Today</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">12</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Transcripts</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950 dark:to-amber-900 border-amber-200 dark:border-amber-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-amber-600 dark:text-amber-400">Pending Review</p>
-                <p className="text-3xl font-bold text-amber-900 dark:text-amber-100">5</p>
-              </div>
-              <Clock className="w-8 h-8 text-amber-600 dark:text-amber-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-3">
+              <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={25} className="h-2 [&>div]:bg-amber-500" />
-              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">Avg. 2.3 hours pending</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Pending Review</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">5</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Queued</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-950 dark:to-rose-900 border-rose-200 dark:border-rose-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-rose-600 dark:text-rose-400">Success Rate</p>
-                <p className="text-3xl font-bold text-rose-900 dark:text-rose-100">96%</p>
-              </div>
-              <TrendingUp className="w-8 h-8 text-rose-600 dark:text-rose-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center mb-3">
+              <TrendingUp className="w-6 h-6 text-rose-600 dark:text-rose-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={96} className="h-2 [&>div]:bg-rose-500" />
-              <p className="text-xs text-rose-600 dark:text-rose-400 mt-2">Above target (95%)</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Success Rate</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">96%</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">Target 95%</span>
             </div>
           </CardContent>
         </Card>

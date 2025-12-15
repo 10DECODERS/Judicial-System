@@ -50,67 +50,56 @@ const JudgeDashboardHome = () => {
       </div>
 
       {/* Key Statistics */}
+      {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border-blue-200 dark:border-blue-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">Active Cases</p>
-                <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">24</p>
-              </div>
-              <Scale className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
+              <Scale className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={75} className="h-2 [&>div]:bg-blue-600" />
-              <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">18 completed this month</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Active Cases</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">24</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Total</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900 border-emerald-200 dark:border-emerald-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Pending Hearings</p>
-                <p className="text-3xl font-bold text-emerald-900 dark:text-emerald-100">8</p>
-              </div>
-              <Calendar className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-3">
+              <Calendar className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={60} className="h-2" />
-              <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">Next hearing in 2 hours</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Pending Hearings</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">8</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Scheduled</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950 dark:to-amber-900 border-amber-200 dark:border-amber-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-amber-600 dark:text-amber-400">Urgent Matters</p>
-                <p className="text-3xl font-bold text-amber-900 dark:text-amber-100">3</p>
-              </div>
-              <AlertTriangle className="w-8 h-8 text-amber-600 dark:text-amber-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-3">
+              <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={30} className="h-2" />
-              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">Requires immediate attention</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Urgent Matters</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">3</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Action Req</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-violet-50 to-violet-100 dark:from-violet-950 dark:to-violet-900 border-violet-200 dark:border-violet-800 hover:shadow-lg transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-violet-600 dark:text-violet-400">Research Queries</p>
-                <p className="text-3xl font-bold text-violet-900 dark:text-violet-100">12</p>
-              </div>
-              <TrendingUp className="w-8 h-8 text-violet-600 dark:text-violet-400" />
+        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-4">
+            <div className="w-12 h-12 rounded-full bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center mb-3">
+              <TrendingUp className="w-6 h-6 text-violet-600 dark:text-violet-400" />
             </div>
-            <div className="mt-4">
-              <Progress value={85} className="h-2" />
-              <p className="text-xs text-violet-600 dark:text-violet-400 mt-2">AI assistance available</p>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Research Queries</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-foreground">12</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">Active</span>
             </div>
           </CardContent>
         </Card>
