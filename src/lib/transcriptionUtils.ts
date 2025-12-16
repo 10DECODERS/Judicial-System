@@ -114,7 +114,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-15',
     duration: '02:15:30',
     language: 'en',
-    clerkName: 'Sarah Williams',
+    clerkName: 'Fatima Al-Zahra',
     status: 'completed',
     fileSize: '2.4 MB',
     entries: [
@@ -172,7 +172,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-14',
     duration: '01:45:20',
     language: 'hi',
-    clerkName: 'Michael Chen',
+    clerkName: 'Ahmed Al-Sayed',
     status: 'completed',
     fileSize: '1.8 MB',
     entries: [
@@ -221,7 +221,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-13',
     duration: '03:20:15',
     language: 'ar',
-    clerkName: 'Priya Patel',
+    clerkName: 'Layla Mahmoud',
     status: 'completed',
     fileSize: '3.1 MB',
     entries: [
@@ -279,7 +279,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-12',
     duration: '01:30:45',
     language: 'en',
-    clerkName: 'Arun Kumar',
+    clerkName: 'Youssef Khalil',
     status: 'completed',
     fileSize: '1.5 MB',
     entries: [
@@ -319,7 +319,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-11',
     duration: '02:45:10',
     language: 'en',
-    clerkName: 'Sarah Williams',
+    clerkName: 'Fatima Al-Zahra',
     status: 'completed',
     fileSize: '2.8 MB',
     entries: [
@@ -368,7 +368,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-10',
     duration: '03:15:45',
     language: 'hi',
-    clerkName: 'Rajesh Kumar',
+    clerkName: 'Omar Al-Fayed',
     status: 'completed',
     fileSize: '3.2 MB',
     entries: [
@@ -426,7 +426,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-09',
     duration: '01:55:20',
     language: 'en',
-    clerkName: 'Lisa Wong',
+    clerkName: 'Noura Al-Bishri',
     status: 'completed',
     fileSize: '2.1 MB',
     entries: [
@@ -475,7 +475,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-08',
     duration: '02:30:15',
     language: 'ar',
-    clerkName: 'Kavitha Raman',
+    clerkName: 'Khalid Al-Mansoori',
     status: 'completed',
     fileSize: '2.6 MB',
     entries: [
@@ -515,7 +515,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-07',
     duration: '04:10:30',
     language: 'en',
-    clerkName: 'David Miller',
+    clerkName: 'Hassan Al-Harbi',
     status: 'completed',
     fileSize: '4.2 MB',
     entries: [
@@ -573,7 +573,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-06',
     duration: '02:05:45',
     language: 'hi',
-    clerkName: 'Anita Desai',
+    clerkName: 'Amina Al-Rahman',
     status: 'completed',
     fileSize: '2.3 MB',
     entries: [
@@ -671,7 +671,7 @@ export const mockTranscriptionRecords = [
     date: '2025-01-04',
     duration: '01:50:15',
     language: 'hi',
-    clerkName: 'Venkat Reddy',
+    clerkName: 'Ibrahim Al-Nasser',
     status: 'completed',
     fileSize: '2.1 MB',
     entries: [

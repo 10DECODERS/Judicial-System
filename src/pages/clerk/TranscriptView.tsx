@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import {
+  mockTranscriptionRecords,
+  translations,
+  getTranslation,
+  legalKeywords,
+  speakerColors,
+  getLanguageDisplayName,
+  getDefaultTranscriptEntries
+} from '@/lib/transcriptionUtils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,223 +33,7 @@ import {
   Languages
 } from 'lucide-react';
 
-// Mock transcription records for individual view (expand with more cases)
-const mockTranscriptionRecords = [
-  {
-    id: '1',
-    caseNumber: '2025-CR-023',
-    caseTitle: 'State vs. Johnson',
-    date: '2025-01-15',
-    duration: '02:15:30',
-    language: 'en',
-    clerkName: 'Sarah Williams',
-    status: 'completed',
-    verification: 'approved',
-    fileSize: '2.4 MB',
-    entries: [
-      {
-        id: '1',
-        timestamp: '09:15:23',
-        speaker: 'Judge',
-        text: 'The court is now in session. Please be seated.',
-        confidence: 95,
-        language: 'en'
-      },
-      {
-        id: '2',
-        timestamp: '09:15:45',
-        speaker: 'Lawyer',
-        text: 'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.',
-        confidence: 92,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '2',
-    caseNumber: '2025-CV-067',
-    caseTitle: 'Smith Enterprises vs. Tech Corp',
-    date: '2025-01-14',
-    duration: '01:45:20',
-    language: 'hi',
-    clerkName: 'Michael Chen',
-    status: 'completed',
-    verification: 'pending',
-    fileSize: '1.8 MB',
-    entries: [
-      {
-        id: '3',
-        timestamp: '10:30:15',
-        speaker: 'Judge',
-        text: 'अदालत अब सत्र में है। कृपया बैठें।',
-        confidence: 93,
-        language: 'hi'
-      }
-    ]
-  },
-  {
-    id: '3',
-    caseNumber: '2025-CR-019',
-    caseTitle: 'People vs. Rodriguez',
-    date: '2025-01-13',
-    duration: '03:20:15',
-    language: 'ar',
-    clerkName: 'Priya Patel',
-    status: 'completed',
-    verification: 'approved',
-    fileSize: '3.1 MB',
-    entries: [
-      {
-        id: '4',
-        timestamp: '14:20:10',
-        speaker: 'Judge',
-        text: 'المحكمة الآن في جلسة. يرجى الجلوس.',
-        confidence: 91,
-        language: 'ar'
-      }
-    ]
-  }
-];
 
-// Default transcript entries (3-4 lines as requested)
-const getDefaultTranscriptEntries = (lang: string) => {
-  const defaultEntries = {
-    'en': [
-      {
-        id: '1',
-        timestamp: '09:15:23',
-        speaker: 'Judge',
-        text: 'The court is now in session. Please be seated.',
-        confidence: 95,
-        language: 'en'
-      },
-      {
-        id: '2',
-        timestamp: '09:15:45',
-        speaker: 'Lawyer',
-        text: 'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.',
-        confidence: 92,
-        language: 'en'
-      },
-      {
-        id: '3',
-        timestamp: '09:16:30',
-        speaker: 'Judge',
-        text: 'Proceed. Has the defense been provided with a copy of this evidence?',
-        confidence: 98,
-        language: 'en'
-      },
-      {
-        id: '4',
-        timestamp: '09:16:50',
-        speaker: 'Lawyer',
-        text: 'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.',
-        confidence: 94,
-        language: 'en'
-      }
-    ],
-    'hi': [
-      {
-        id: '1',
-        timestamp: '09:15:23',
-        speaker: 'Judge',
-        text: 'अदालत अब सत्र में है। कृपया बैठें।',
-        confidence: 95,
-        language: 'hi'
-      },
-      {
-        id: '2',
-        timestamp: '09:15:45',
-        speaker: 'Lawyer',
-        text: 'युवर ऑनर्स, हम 15 जनवरी, 2024 को हस्ताक्षरित समझौते के संबंध में सबूत पेश करना चाहते हैं।',
-        confidence: 92,
-        language: 'hi'
-      },
-      {
-        id: '3',
-        timestamp: '09:16:30',
-        speaker: 'Judge',
-        text: 'आगे बढ़ें। क्या बचाव पक्ष को इस सबूत की एक प्रति प्रदान की गई है?',
-        confidence: 98,
-        language: 'hi'
-      },
-      {
-        id: '4',
-        timestamp: '09:16:50',
-        speaker: 'Lawyer',
-        text: 'हाँ, योर ऑनर्स। हमें खोज के दौरान यह प्राप्त हुआ। हमें इसकी स्वीकार्यता पर आपत्तियाँ हैं।',
-        confidence: 94,
-        language: 'hi'
-      }
-    ],
-    'ar': [
-      {
-        id: '1',
-        timestamp: '09:15:23',
-        speaker: 'Judge',
-        text: 'المحكمة الآن في جلسة. يرجى الجلوس.',
-        confidence: 95,
-        language: 'ar'
-      },
-      {
-        id: '2',
-        timestamp: '09:15:45',
-        speaker: 'Lawyer',
-        text: 'سيادتكم، نود تقديم أدلة تتعلق بالعقد الموقع في 15 يناير 2024.',
-        confidence: 92,
-        language: 'ar'
-      },
-      {
-        id: '3',
-        timestamp: '09:16:30',
-        speaker: 'Judge',
-        text: 'تابع. هل تم تقديم نسخة من هذا الدليل للدفاع؟',
-        confidence: 98,
-        language: 'ar'
-      },
-      {
-        id: '4',
-        timestamp: '09:16:50',
-        speaker: 'Lawyer',
-        text: 'نعم سيادتكم. وصلنا إليه أثناء الاكتشاف. لدينا اعتراضات على قابليته للقبول.',
-        confidence: 94,
-        language: 'ar'
-      }
-    ]
-  };
-  return defaultEntries[lang] || defaultEntries['en'];
-};
-
-// Translation maps for proper translations (matching TranscriptionControl.tsx)
-const translations = {
-  'ar': {
-    'The court is now in session. Please be seated.': 'المحكمة الآن في جلسة. يرجى الجلوس.',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'سيادتكم، نود تقديم أدلة تتعلق بالعقد الموقع في 15 يناير 2024.',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'تابع. هل تم تقديم نسخة من هذا الدليل للدفاع؟',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'نعم سيادتكم. وصلنا إليه أثناء الاكتشاف. لدينا اعتراضات على قابليته للقبول.',
-    'State your objection for the record.': 'أعلن اعتراضك للسجل.'
-  },
-  'hi': {
-    'The court is now in session. Please be seated.': 'अदालत अब सत्र में है। कृपया बैठें।',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'युवर ऑनर्स, हम 15 जनवरी, 2024 को हस्ताक्षरित समझौते के संबंध में सबूत पेश करना चाहते हैं।',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'आगे बढ़ें। क्या बचाव पक्ष को इस सबूत की एक प्रति प्रदान की गई है?',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'हाँ, योर ऑनर्स। हमें खोज के दौरान यह प्राप्त हुआ। हमें इसकी स्वीकार्यता पर आपत्तियाँ हैं।',
-    'State your objection for the record.': 'रिकॉर्ड के लिए अपनी आपत्ति बताएं।'
-  }
-};
-
-const getTranslation = (text: string, lang: string) => {
-  return translations[lang]?.[text] || text;
-};
-
-const legalKeywords = ['objection', 'sustained', 'witness', 'adjourned', 'evidence', 'testimony', 'discovery', 'admissible',];
-
-const speakerColors = {
-  Judge: 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-950 dark:text-blue-200 dark:border-blue-800',
-  Clerk: 'bg-green-100 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-200 dark:border-green-800',
-  Lawyer: 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-green-950 dark:text-purple-200 dark:border-purple-800',
-  Witness: 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-950 dark:text-orange-200 dark:border-orange-800'
-};
 
 const TranscriptView = () => {
   const { recordId } = useParams();
@@ -311,6 +104,7 @@ const TranscriptView = () => {
 
   const highlightLegalKeywords = (text: string) => {
     let highlightedText = text;
+    // @ts-ignore
     legalKeywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded text-yellow-900 dark:text-yellow-100">${keyword}</mark>`);
@@ -340,14 +134,7 @@ const TranscriptView = () => {
     }
   };
 
-  const getLanguageDisplayName = (lang: string) => {
-    switch (lang) {
-      case 'en': return 'English';
-      case 'ar': return 'العربية';
-      case 'hi': return 'हिंदी';
-      default: return lang.toUpperCase();
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-background p-8 animate-fade-in">

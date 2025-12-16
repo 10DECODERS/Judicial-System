@@ -33,7 +33,7 @@ import {
   Trash2,
   Eye
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   mockTranscriptionRecords,
   translations,
@@ -108,8 +108,9 @@ const mockTranscriptData: TranscriptEntry[] = [
 
 
 const TranscriptionControl = () => {
+  const location = useLocation();
   // ALL useState hooks must come FIRST and in SAME ORDER every time
-  const [currentView, setCurrentView] = useState<'history' | 'live' | 'completed'>('history');
+  const [currentView, setCurrentView] = useState<'history' | 'live' | 'completed'>((location.state as any)?.view || 'history');
   const [savedTranscripts, setSavedTranscripts] = useState<any[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);

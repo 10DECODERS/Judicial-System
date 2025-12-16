@@ -8,6 +8,7 @@ import { Mic, FileText, Clock, CheckCircle, Users, Calendar, AlertTriangle, Tren
 import TranscriptionControl from './clerk/TranscriptionControl';
 import TranscriptionRecords from './clerk/TranscriptionRecords';
 import TranscriptView from './clerk/TranscriptView';
+import { mockTranscriptionRecords } from '@/lib/transcriptionUtils';
 
 const ClerkDashboard = () => {
   return (
@@ -106,7 +107,7 @@ const ClerkDashboardHome = () => {
         {/* Quick Access Modules */}
         <div>
           <h2 className="text-2xl font-display font-semibold mb-4 text-foreground">Quick Access</h2>
-          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-card" onClick={() => navigate('/clerk/transcription')}>
+          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-card" onClick={() => navigate('/clerk/transcription', { state: { view: 'live' } })}>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
@@ -128,16 +129,7 @@ const ClerkDashboardHome = () => {
                   </div>
                   <Badge className="bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200">Ready</Badge>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <Button className="w-full mt-3" variant="outline">
-                    <Mic className="w-4 h-4 mr-2" />
-                    Start Session
-                  </Button>
-                  <Button className="w-full mt-3" variant="outline">
-                    <Headphones className="w-4 h-4 mr-2" />
-                    Monitor
-                  </Button>
-                </div>
+
               </div>
             </CardContent>
           </Card>
@@ -187,35 +179,26 @@ const ClerkDashboardHome = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">State vs. Williams</p>
-                  <p className="text-sm text-muted-foreground">Criminal Case #2025-CR-023</p>
-                </div>
-                <div className="text-right">
-                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 mb-1">Complete</Badge>
-                  <p className="text-xs text-muted-foreground">2h 15m</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">Smith vs. Johnson</p>
-                  <p className="text-sm text-muted-foreground">Civil Case #2025-CV-067</p>
-                </div>
-                <div className="text-right">
-                  <Badge className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200 mb-1">Processing</Badge>
-                  <p className="text-xs text-muted-foreground">Est. 30m</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">Davis Family Trust</p>
-                  <p className="text-sm text-muted-foreground">Estate Case #2025-ES-012</p>
-                </div>
-                <div className="text-right">
-                  <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 mb-1">Review</Badge>
-                  <p className="text-xs text-muted-foreground">Pending</p>
-                </div>
+              <div className="space-y-4">
+                {mockTranscriptionRecords.slice(0, 3).map((record, index) => (
+                  <div key={record.id} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
+                    <div>
+                      <p className="font-medium">{record.caseTitle}</p>
+                      <p className="text-sm text-muted-foreground">Case #{record.caseNumber}</p>
+                    </div>
+                    <div className="text-right">
+                      <Badge className={`${index === 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' :
+                          index === 1 ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200' :
+                            'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
+                        } mb-1`}>
+                        {index === 0 ? 'Complete' : index === 1 ? 'Processing' : 'Review'}
+                      </Badge>
+                      <p className="text-xs text-muted-foreground">
+                        {index === 0 ? record.duration : index === 1 ? 'Est. 30m' : 'Pending'}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </CardContent>
@@ -267,32 +250,7 @@ const ClerkDashboardHome = () => {
 
       {/* System Status & Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              System Alerts
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-200/50">
-                <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                <div className="flex-1">
-                  <p className="font-medium text-sm text-emerald-800 dark:text-emerald-200">All Systems Operational</p>
-                  <p className="text-xs text-emerald-600 dark:text-emerald-400">Last checked 5 minutes ago</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 bg-cyan-50 dark:bg-cyan-950/50 rounded-lg border border-cyan-200/50">
-                <Clock className="w-5 h-5 text-cyan-600 dark:text-cyan-400 mt-0.5" />
-                <div className="flex-1">
-                  <p className="font-medium text-sm text-cyan-800 dark:text-cyan-200">Scheduled Maintenance</p>
-                  <p className="text-xs text-cyan-600 dark:text-cyan-400">Sunday 2:00 AM - 4:00 AM EST</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+
 
         <Card className="bg-card">
           <CardHeader>

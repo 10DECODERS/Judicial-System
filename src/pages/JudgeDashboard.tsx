@@ -1,4 +1,5 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import { mockTranscriptionRecords } from '@/lib/transcriptionUtils';
 import { AIAssistant } from '@/components/AIAssistant';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -155,27 +156,21 @@ const JudgeDashboardHome = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">Smith vs. Johnson</p>
-                  <p className="text-sm text-muted-foreground">Civil Case #2025-CV-067</p>
+              {mockTranscriptionRecords.slice(0, 3).map((record, index) => (
+                <div key={record.id} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
+                  <div>
+                    <p className="font-medium">{record.caseTitle}</p>
+                    <p className="text-sm text-muted-foreground">Case #{record.caseNumber}</p>
+                  </div>
+                  <Badge className={
+                    index === 0 ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200" :
+                      index === 1 ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" :
+                        "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200"
+                  }>
+                    {index === 0 ? "Active" : index === 1 ? "In Progress" : "Review"}
+                  </Badge>
                 </div>
-                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">Active</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">State vs. Williams</p>
-                  <p className="text-sm text-muted-foreground">Criminal Case #2025-CR-023</p>
-                </div>
-                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">In Progress</Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                <div>
-                  <p className="font-medium">Davis Family Trust</p>
-                  <p className="text-sm text-muted-foreground">Estate Case #2025-ES-012</p>
-                </div>
-                <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">Review</Badge>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>

@@ -82,8 +82,8 @@ const Login = () => {
                     setUsername('hon. justice');
                     setPassword('justice2025');
                   } else if (value === 'clerk') {
-                    setUsername('court.clerk');
-                    setPassword('clerk2025');
+                    setUsername('Fatima Al-Zahra');
+                    setPassword('fatima2025');
                   }
                 }}>
                   <SelectTrigger>
