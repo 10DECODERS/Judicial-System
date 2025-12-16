@@ -107,7 +107,7 @@ const ClerkDashboardHome = () => {
         {/* Quick Access Modules */}
         <div>
           <h2 className="text-2xl font-display font-semibold mb-4 text-foreground">Quick Access</h2>
-          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-card" onClick={() => navigate('/clerk/transcription', { state: { view: 'live' } })}>
+          <Card className="court-card card-hover cursor-pointer border-l-[hsl(var(--accent))] group hover:shadow-lg transition-all duration-300 bg-card h-full" onClick={() => navigate('/clerk/transcription', { state: { view: 'live' } })}>
             <CardHeader className="pb-4">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
@@ -138,7 +138,7 @@ const ClerkDashboardHome = () => {
         {/* Active Sessions */}
         <div>
           <h3 className="text-2xl font-display font-semibold mb-4 text-foreground">Active Sessions</h3>
-          <Card className="bg-card">
+          <Card className="bg-card h-full">
             <CardContent className="p-6">
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-200/50">
@@ -168,7 +168,7 @@ const ClerkDashboardHome = () => {
         </div>
       </div>
 
-      {/* Recent Records & Quality Metrics */}
+      {/* Recent Records & Courtroom Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <Card className="bg-card">
           <CardHeader>
@@ -188,8 +188,8 @@ const ClerkDashboardHome = () => {
                     </div>
                     <div className="text-right">
                       <Badge className={`${index === 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' :
-                          index === 1 ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200' :
-                            'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
+                        index === 1 ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200' :
+                          'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
                         } mb-1`}>
                         {index === 0 ? 'Complete' : index === 1 ? 'Processing' : 'Review'}
                       </Badge>
@@ -203,54 +203,6 @@ const ClerkDashboardHome = () => {
             </div>
           </CardContent>
         </Card>
-
-        <Card className="bg-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-              Quality Metrics
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Transcription Accuracy</span>
-                  <span className="font-medium">94.2%</span>
-                </div>
-                <Progress value={94} className="h-2 [&>div]:bg-emerald-500" />
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Processing Speed</span>
-                  <span className="font-medium">2.3x real-time</span>
-                </div>
-                <Progress value={85} className="h-2 [&>div]:bg-cyan-500" />
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Audio Quality Score</span>
-                  <span className="font-medium">8.7/10</span>
-                </div>
-                <Progress value={87} className="h-2 [&>div]:bg-violet-500" />
-              </div>
-              <div className="pt-4 border-t border-border/50">
-                <p className="text-sm text-muted-foreground mb-2">Overall Performance</p>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-[hsl(var(--muted))] rounded-full h-3">
-                    <div className="bg-gradient-to-r from-emerald-400 to-emerald-600 h-3 rounded-full" style={{ width: '91%' }}></div>
-                  </div>
-                  <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">91%</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* System Status & Alerts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-
 
         <Card className="bg-card">
           <CardHeader>
