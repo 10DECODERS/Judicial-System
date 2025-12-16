@@ -203,7 +203,7 @@ export default function TranscriptsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2 text-body">
-                        <Clock className="w-4 h-4 text-accent" />
+                        <Clock className="w-4 h-4 text-muted-foreground" />
                         {record.duration}
                       </div>
                     </TableCell>
@@ -309,7 +309,7 @@ export default function TranscriptsPage() {
       <Card className="border-accent/20 bg-accent/5">
         <CardContent className="p-4">
           <p className="text-xs text-body">
-            <strong className="text-accent">Judge Access Notice:</strong> You have read-only access to view and review transcription records. Any official transcription work must be performed by court clerks.
+            <strong className="text-primary">Judge Access Notice:</strong> You have read-only access to view and review transcription records. Any official transcription work must be performed by court clerks.
           </p>
         </CardContent>
       </Card>

@@ -110,7 +110,7 @@ export const mockTranscriptionRecords = [
   {
     id: '1',
     caseNumber: '2025-CR-023',
-    caseTitle: 'State vs. Johnson',
+    caseTitle: 'State vs. Ahmed Al-Mansoor',
     date: '2025-01-15',
     duration: '02:15:30',
     language: 'en',
@@ -168,7 +168,7 @@ export const mockTranscriptionRecords = [
   {
     id: '2',
     caseNumber: '2025-CV-067',
-    caseTitle: 'Smith Enterprises vs. Tech Corp',
+    caseTitle: 'Al-Hajri Construction vs. Tech Corp',
     date: '2025-01-14',
     duration: '01:45:20',
     language: 'hi',
@@ -217,7 +217,7 @@ export const mockTranscriptionRecords = [
   {
     id: '3',
     caseNumber: '2025-CR-019',
-    caseTitle: 'People vs. Rodriguez',
+    caseTitle: 'People vs. Omar Al-Khattab',
     date: '2025-01-13',
     duration: '03:20:15',
     language: 'ar',
@@ -275,7 +275,7 @@ export const mockTranscriptionRecords = [
   {
     id: '4',
     caseNumber: '2025-CV-045',
-    caseTitle: 'Brown Family Trust Dispute',
+    caseTitle: 'Al-Rashid Family Trust Dispute',
     date: '2025-01-12',
     duration: '01:30:45',
     language: 'en',
@@ -315,7 +315,7 @@ export const mockTranscriptionRecords = [
   {
     id: '5',
     caseNumber: '2025-CR-088',
-    caseTitle: 'State vs. Anderson',
+    caseTitle: 'State vs. Yousef Ibrahim',
     date: '2025-01-11',
     duration: '02:45:10',
     language: 'en',
@@ -364,7 +364,7 @@ export const mockTranscriptionRecords = [
   {
     id: '6',
     caseNumber: '2025-CV-112',
-    caseTitle: 'Patel Industries vs. Global Corp',
+    caseTitle: 'Bin Faisal Group vs. Global Corp',
     date: '2025-01-10',
     duration: '03:15:45',
     language: 'hi',
@@ -422,7 +422,7 @@ export const mockTranscriptionRecords = [
   {
     id: '7',
     caseNumber: '2025-CR-156',
-    caseTitle: 'Commonwealth vs. Martinez',
+    caseTitle: 'Commonwealth vs. Faisal Al-Saud',
     date: '2025-01-09',
     duration: '01:55:20',
     language: 'en',
@@ -471,7 +471,7 @@ export const mockTranscriptionRecords = [
   {
     id: '8',
     caseNumber: '2025-CV-203',
-    caseTitle: 'Tech Solutions vs. Digital Dynamics',
+    caseTitle: 'Etisalat vs. Digital Dynamics',
     date: '2025-01-08',
     duration: '02:30:15',
     language: 'ar',
@@ -511,7 +511,7 @@ export const mockTranscriptionRecords = [
   {
     id: '9',
     caseNumber: '2025-CR-278',
-    caseTitle: 'People vs. Thompson',
+    caseTitle: 'People vs. Hassan Al-Ali',
     date: '2025-01-07',
     duration: '04:10:30',
     language: 'en',
@@ -569,7 +569,7 @@ export const mockTranscriptionRecords = [
   {
     id: '10',
     caseNumber: '2025-CV-334',
-    caseTitle: 'Healthcare Partners vs. Medical Associates',
+    caseTitle: 'Burjeel Medical vs. Medical Associates',
     date: '2025-01-06',
     duration: '02:05:45',
     language: 'hi',
@@ -618,7 +618,7 @@ export const mockTranscriptionRecords = [
   {
     id: '11',
     caseNumber: '2025-CR-145',
-    caseTitle: 'State vs. Rahman',
+    caseTitle: 'State vs. Mohammed Abdulrahman',
     date: '2025-01-05',
     duration: '02:30:20',
     language: 'ar',
@@ -667,7 +667,7 @@ export const mockTranscriptionRecords = [
   {
     id: '12',
     caseNumber: '2025-CV-289',
-    caseTitle: 'Tech Solutions vs. Innovative Software',
+    caseTitle: 'Du Telecom vs. Innovative Software',
     date: '2025-01-04',
     duration: '01:50:15',
     language: 'hi',

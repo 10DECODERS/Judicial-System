@@ -34,6 +34,13 @@ import {
   Eye
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import {
+  mockTranscriptionRecords,
+  translations,
+  getTranslation,
+  legalKeywords,
+  speakerColors
+} from '@/lib/transcriptionUtils';
 
 // Types for transcription data
 interface TranscriptEntry {
@@ -52,269 +59,7 @@ interface TranslationEntry {
   targetLanguage: string;
 }
 
-// Mock transcription records for history view (minimum 10 cases)
-const mockTranscriptionRecords = [
-  {
-    id: '1',
-    caseNumber: '2025-CR-023',
-    caseTitle: 'State vs. Johnson',
-    date: '2025-01-15',
-    duration: '02:15:30',
-    language: 'en',
-    clerkName: 'Sarah Williams',
-    status: 'completed',
-    fileSize: '2.4 MB',
-    entries: [
-      {
-        id: '1',
-        timestamp: '09:15:23',
-        speaker: 'Judge',
-        text: 'The court is now in session. Please be seated.',
-        confidence: 95,
-        language: 'en'
-      },
-      {
-        id: '2',
-        timestamp: '09:15:45',
-        speaker: 'Lawyer',
-        text: 'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.',
-        confidence: 92,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '2',
-    caseNumber: '2025-CV-067',
-    caseTitle: 'Smith Enterprises vs. Tech Corp',
-    date: '2025-01-14',
-    duration: '01:45:20',
-    language: 'hi',
-    clerkName: 'Michael Chen',
-    status: 'completed',
-    fileSize: '1.8 MB',
-    entries: [
-      {
-        id: '3',
-        timestamp: '10:30:15',
-        speaker: 'Judge',
-        text: 'अदालत अब सत्र में है। कृपया बैठें।',
-        confidence: 93,
-        language: 'hi'
-      }
-    ]
-  },
-  {
-    id: '3',
-    caseNumber: '2025-CR-019',
-    caseTitle: 'People vs. Rodriguez',
-    date: '2025-01-13',
-    duration: '03:20:15',
-    language: 'ar',
-    clerkName: 'Priya Patel',
-    status: 'completed',
-    fileSize: '3.1 MB',
-    entries: [
-      {
-        id: '4',
-        timestamp: '14:20:10',
-        speaker: 'Judge',
-        text: 'المحكمة الآن في جلسة. يرجى الجلوس.',
-        confidence: 91,
-        language: 'ar'
-      }
-    ]
-  },
-  {
-    id: '4',
-    caseNumber: '2025-CV-045',
-    caseTitle: 'Brown Family Trust Dispute',
-    date: '2025-01-12',
-    duration: '01:30:45',
-    language: 'en',
-    clerkName: 'Arun Kumar',
-    status: 'completed',
-    fileSize: '1.5 MB',
-    entries: [
-      {
-        id: '5',
-        timestamp: '11:15:30',
-        speaker: 'Judge',
-        text: 'This court has reviewed all submitted documents and evidence.',
-        confidence: 94,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '5',
-    caseNumber: '2025-CR-088',
-    caseTitle: 'State vs. Anderson',
-    date: '2025-01-11',
-    duration: '02:45:10',
-    language: 'en',
-    clerkName: 'Sarah Williams',
-    status: 'completed',
-    fileSize: '2.8 MB',
-    entries: [
-      {
-        id: '6',
-        timestamp: '13:45:22',
-        speaker: 'Lawyer',
-        text: 'The defense moves to suppress the evidence obtained without proper warrant.',
-        confidence: 89,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '6',
-    caseNumber: '2025-CV-112',
-    caseTitle: 'Patel Industries vs. Global Corp',
-    date: '2025-01-10',
-    duration: '03:15:45',
-    language: 'hi',
-    clerkName: 'Rajesh Kumar',
-    status: 'completed',
-    fileSize: '3.2 MB',
-    entries: [
-      {
-        id: '7',
-        timestamp: '09:30:18',
-        speaker: 'Judge',
-        text: 'अनुबंध के उल्लंघन के सभी सबूत प्रस्तुत करें।',
-        confidence: 92,
-        language: 'hi'
-      }
-    ]
-  },
-  {
-    id: '7',
-    caseNumber: '2025-CR-156',
-    caseTitle: 'Commonwealth vs. Martinez',
-    date: '2025-01-09',
-    duration: '01:55:20',
-    language: 'en',
-    clerkName: 'Lisa Wong',
-    status: 'completed',
-    fileSize: '2.1 MB',
-    entries: [
-      {
-        id: '8',
-        timestamp: '15:20:35',
-        speaker: 'Witness',
-        text: 'I witnessed the incident on the evening of December 15th.',
-        confidence: 87,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '8',
-    caseNumber: '2025-CV-203',
-    caseTitle: 'Tech Solutions vs. Digital Dynamics',
-    date: '2025-01-08',
-    duration: '02:30:15',
-    language: 'ar',
-    clerkName: 'Kavitha Raman',
-    status: 'completed',
-    fileSize: '2.6 MB',
-    entries: [
-      {
-        id: '9',
-        timestamp: '10:45:12',
-        speaker: 'Lawyer',
-        text: 'نقدم أدلة على الإخلال بالعقد.',
-        confidence: 90,
-        language: 'ar'
-      }
-    ]
-  },
-  {
-    id: '9',
-    caseNumber: '2025-CR-278',
-    caseTitle: 'People vs. Thompson',
-    date: '2025-01-07',
-    duration: '04:10:30',
-    language: 'en',
-    clerkName: 'David Miller',
-    status: 'completed',
-    fileSize: '4.2 MB',
-    entries: [
-      {
-        id: '10',
-        timestamp: '09:15:28',
-        speaker: 'Judge',
-        text: 'The jury will disregard the last statement made by the witness.',
-        confidence: 96,
-        language: 'en'
-      }
-    ]
-  },
-  {
-    id: '10',
-    caseNumber: '2025-CV-334',
-    caseTitle: 'Healthcare Partners vs. Medical Associates',
-    date: '2025-01-06',
-    duration: '02:05:45',
-    language: 'hi',
-    clerkName: 'Anita Desai',
-    status: 'completed',
-    fileSize: '2.3 MB',
-    entries: [
-      {
-        id: '11',
-        timestamp: '14:30:22',
-        speaker: 'Judge',
-        text: 'मामले की सुनवाई अगली तारीख तक स्थगित की जाती है।',
-        confidence: 88,
-        language: 'hi'
-      }
-    ]
-  },
-  {
-    id: '11',
-    caseNumber: '2025-CR-145',
-    caseTitle: 'State vs. Rahman',
-    date: '2025-01-05',
-    duration: '02:30:20',
-    language: 'ar',
-    clerkName: 'Faruk Ahmed',
-    status: 'completed',
-    fileSize: '2.7 MB',
-    entries: [
-      {
-        id: '12',
-        timestamp: '11:00:45',
-        speaker: 'Judge',
-        text: 'المحكمة الآن في جلسة. يرجى الجلوس.',
-        confidence: 90,
-        language: 'ar'
-      }
-    ]
-  },
-  {
-    id: '12',
-    caseNumber: '2025-CV-289',
-    caseTitle: 'Tech Solutions vs. Innovative Software',
-    date: '2025-01-04',
-    duration: '01:50:15',
-    language: 'en',
-    clerkName: 'Venkat Reddy',
-    status: 'completed',
-    fileSize: '2.1 MB',
-    entries: [
-      {
-        id: '13',
-        timestamp: '13:15:30',
-        speaker: 'Judge',
-        text: 'This court is now in session. Please be seated.',
-        confidence: 87,
-        language: 'en'
-      }
-    ]
-  }
-];
+
 
 // Mock data for live transcription
 const mockTranscriptData: TranscriptEntry[] = [
@@ -360,57 +105,7 @@ const mockTranscriptData: TranscriptEntry[] = [
   }
 ];
 
-const legalKeywords = ['objection', 'sustained', 'witness', 'adjourned', 'evidence', 'testimony', 'discovery', 'admissible',];
 
-// Translation maps for proper translations
-const translations = {
-  'hi': {
-    'The court is now in session. Please be seated.': 'अदालत अब सत्र में है। कृपया बैठें।',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'युवर ऑनर्स, हम 15 जनवरी, 2024 को हस्ताक्षरित समझौते के संबंध में सबूत पेश करना चाहते हैं।',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'आगे बढ़ें। क्या बचाव पक्ष को इस सबूत की एक प्रति प्रदान की गई है?',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'हाँ, योर ऑनर्स। हमें खोज के दौरान यह प्राप्त हुआ। हमें इसकी स्वीकार्यता पर आपत्तियाँ हैं।',
-    'State your objection for the record.': 'रिकॉर्ड के लिए अपनी आपत्ति बताएं।'
-  },
-  'ar': {
-    'The court is now in session. Please be seated.': 'المحكمة الآن في جلسة. يرجى الجلوس.',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'سيادتكم، نود تقديم أدلة تتعلق بالعقد الموقع في 15 يناير 2024.',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'تابع. هل تم تقديم نسخة من هذا الدليل للدفاع؟',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'نعم سيادتكم. وصلنا إليه أثناء الاكتشاف. لدينا اعتراضات على قابليته للقبول.',
-    'State your objection for the record.': 'أعلن اعتراضك للسجل.'
-  },
-  'ta': {
-    'The court is now in session. Please be seated.': 'நீதிமன்றம் இப்போது அமர்வில் உள்ளது. தயவுசெய்து அமருங்கள்.',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'யுவர் ஆனர், ஜனவரி 15, 2024 அன்று கையெழுத்திடப்பட்ட ஒப்பந்தத்தைப் பற்றிய ஆதாரங்களை வழங்க விரும்புகிறோம்.',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'தொடருங்கள். பாதுகாப்பு துறைக்கு இந்த ஆதாரத்தின் நகல் வழங்கப்பட்டதா?',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'ஆம், யுவர் ஆனர். கண்டுபிடிப்பு போது நாங்கள் அதைப் பெற்றோம். அதன் ஏற்றுக்கொள்ளத்தக்க தன்மைக்கு எங்களுக்கு எதிர்ப்புகள் உள்ளன.',
-    'State your objection for the record.': 'பதிவுக்கு உங்கள் எதிர்ப்பைத் தெரிவிக்கவும்.'
-  },
-  'bn': {
-    'The court is now in session. Please be seated.': 'আদালত এখন অধিবেশনে আছে। দয়া করে আপনার আসন গ্রহণ করুণ।',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'যুভার অনারস, আমরা জানুয়ারি 15, 2024 তারিখে স্বাক্ষরিত চুক্তি সংক্রান্ত প্রমাণ উপস্থাপন করতে চাই।',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'এগিয়ে যান। প্রতিরক্ষা দলকে এই প্রমাণের একটি অনুলিপি দেওয়া হয়েছে?',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'হ্যাঁ, যুভার অনারস। আমরা এটি আবিষ্কারের সময় পেয়েছি। এর গ্রহণযোগ্যতার বিরুদ্ধে আমাদের আপত্তি রয়েছে।',
-    'State your objection for the record.': 'রেকর্ডের জন্য আপনার আপত্তি বলুন।'
-  },
-  'te': {
-    'The court is now in session. Please be seated.': 'కోర్ట్ అధివేశనలో ఉంది. దయచేసి కూర్చుండండి.',
-    'Your Honor, we wish to present evidence regarding the contract signed on January 15th, 2024.': 'యువర్ ఆనర్, మేము జనవరి 15, 2024 సంతకం చేసిన ఒప్పందం సంబంధించిన ఆధారాలను వివరించాలనుకుంటున్నాము.',
-    'Proceed. Has the defense been provided with a copy of this evidence?': 'ముందుకు వెళ్లండి. రక్షణకు ఈ ఆధారంలో అనుకూలి మొసుతుంది?',
-    'Yes, Your Honor. We received it during discovery. We have objections to its admissibility.': 'అవును, యువర్ ఆనర్. అన్వేషణలో మేము దానిని స్వీకరించాము. దాని స్వీకరణకు మాకు ఆపత్తులు ఉన్నాయి.',
-    'State your objection for the record.': 'రికార్డ్ కోసం మీ ఆపత్తిని తెలియజేయండి.'
-  }
-};
-
-const getTranslation = (text: string, lang: string) => {
-  return translations[lang]?.[text] || text;
-};
-
-const speakerColors = {
-  Judge: 'bg-blue-100 text-blue-800 border-blue-300',
-  Clerk: 'bg-green-100 text-green-800 border-green-300',
-  Lawyer: 'bg-purple-100 text-purple-800 border-purple-300',
-  Witness: 'bg-orange-100 text-orange-800 border-orange-300'
-};
 
 const TranscriptionControl = () => {
   // ALL useState hooks must come FIRST and in SAME ORDER every time
@@ -559,9 +254,9 @@ const TranscriptionControl = () => {
     setTranscript([]);
     setCurrentTime('00:00:00');
     setCurrentView('history');
-    toast({ 
-      title: "Success", 
-      description: `Transcript saved successfully as ${filename}` 
+    toast({
+      title: "Success",
+      description: `Transcript saved successfully as ${filename}`
     });
   };
 
@@ -572,6 +267,7 @@ const TranscriptionControl = () => {
 
   const highlightLegalKeywords = (text: string) => {
     let highlightedText = text;
+    // @ts-ignore
     legalKeywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">${keyword}</mark>`);
@@ -621,7 +317,7 @@ const TranscriptionControl = () => {
               </Select>
               <Button
                 onClick={() => setCurrentView('live')}
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 <PlayCircle className="w-4 h-4 mr-2" />
                 Live Transcription
@@ -654,75 +350,75 @@ const TranscriptionControl = () => {
                   </TableHeader>
                   <TableBody>
                     {paginatedRecords.map((record) => (
-                        <TableRow key={record.id} className="hover:bg-muted/50">
-                          <TableCell className="font-medium">{record.caseNumber}</TableCell>
-                          <TableCell>
-                            <div className="max-w-xs truncate" title={record.caseTitle}>
-                              {record.caseTitle}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {new Date(record.date).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-muted-foreground" />
-                              {record.duration}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={
-                              record.language === 'en' ? 'bg-blue-100 text-blue-800' :
+                      <TableRow key={record.id} className="hover:bg-muted/50">
+                        <TableCell className="font-medium">{record.caseNumber}</TableCell>
+                        <TableCell>
+                          <div className="max-w-xs truncate" title={record.caseTitle}>
+                            {record.caseTitle}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {new Date(record.date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-muted-foreground" />
+                            {record.duration}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={
+                            record.language === 'en' ? 'bg-blue-100 text-blue-800' :
                               record.language === 'hi' ? 'bg-orange-100 text-orange-800' :
-                              record.language === 'ar' ? 'bg-green-100 text-green-800' :
-                              'bg-pink-100 text-pink-800'
-                            }>
-                              {record.language === 'en' ? 'English' : record.language === 'hi' ? 'हिंदी' : 'العربية'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{record.clerkName}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {record.fileSize}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex items-center gap-1 justify-end">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => navigate(`/clerk/transcript-view/${record.id}`)}
-                                className="p-2 h-8 w-8"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="p-2 h-8 w-8"
-                              >
-                                <Download className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  if (confirm(`Are you sure you want to delete the transcription record for case ${record.caseNumber}?`)) {
-                                    const existingRecords = localStorage.getItem('transcriptionRecords');
-                                    if (existingRecords) {
-                                      const currentRecords = JSON.parse(existingRecords);
-                                      const updatedRecords = currentRecords.filter((r: any) => r.id !== record.id);
-                                      localStorage.setItem('transcriptionRecords', JSON.stringify(updatedRecords));
-                                      setSavedTranscripts(updatedRecords);
-                                    }
+                                record.language === 'ar' ? 'bg-green-100 text-green-800' :
+                                  'bg-pink-100 text-pink-800'
+                          }>
+                            {record.language === 'en' ? 'English' : record.language === 'hi' ? 'हिंदी' : 'العربية'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{record.clerkName}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {record.fileSize}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center gap-1 justify-end">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => navigate(`/clerk/transcript-view/${record.id}`)}
+                              className="p-2 h-8 w-8"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="p-2 h-8 w-8"
+                            >
+                              <Download className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                if (confirm(`Are you sure you want to delete the transcription record for case ${record.caseNumber}?`)) {
+                                  const existingRecords = localStorage.getItem('transcriptionRecords');
+                                  if (existingRecords) {
+                                    const currentRecords = JSON.parse(existingRecords);
+                                    const updatedRecords = currentRecords.filter((r: any) => r.id !== record.id);
+                                    localStorage.setItem('transcriptionRecords', JSON.stringify(updatedRecords));
+                                    setSavedTranscripts(updatedRecords);
                                   }
-                                }}
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 h-8 w-8"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                }
+                              }}
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 h-8 w-8"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </div>
@@ -857,11 +553,11 @@ const TranscriptionControl = () => {
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="ar">العربية</SelectItem>
-                      <SelectItem value="hi">हिंदी</SelectItem>
-                    </SelectContent>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="ar">العربية</SelectItem>
+                        <SelectItem value="hi">हिंदी</SelectItem>
+                      </SelectContent>
                     </Select>
                   </div>
                 </div>
@@ -1054,7 +750,7 @@ const TranscriptionControl = () => {
 
             </Card>
 
-              {translation && (
+            {translation && (
               <Card className="court-card">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
