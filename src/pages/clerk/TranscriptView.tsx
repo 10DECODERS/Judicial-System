@@ -2,17 +2,15 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   mockTranscriptionRecords,
-  translations,
   getTranslation,
   legalKeywords,
   speakerColors,
   getLanguageDisplayName,
   getDefaultTranscriptEntries
 } from '@/lib/transcriptionUtils';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
@@ -20,31 +18,26 @@ import {
   Download,
   Printer,
   Search,
-  Bookmark,
-  BookmarkCheck,
   Clock,
-  Calendar,
   User,
   FileText,
-  AlertCircle,
   CheckCircle,
-  Globe,
   Share,
-  Languages
+  Globe,
+  Gavel,
+  Activity,
+  Bookmark
 } from 'lucide-react';
-
-
 
 const TranscriptView = () => {
   const { recordId } = useParams();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('en'); // Changed from selectedTranslation
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [transcript, setTranscript] = useState<any[]>([]);
   const [caseMetadata, setCaseMetadata] = useState<any>(null);
 
   useEffect(() => {
-    // First check localStorage for saved transcripts
     const savedRecords = localStorage.getItem('transcriptionRecords');
     let allRecords = [...mockTranscriptionRecords];
 
@@ -52,40 +45,27 @@ const TranscriptView = () => {
       allRecords = [...allRecords, ...JSON.parse(savedRecords)];
     }
 
-    // Find the record by ID
     const record = allRecords.find(r => r.id === recordId);
     if (record) {
       setCaseMetadata(record);
-      // Show default entries if no entries exist
       setTranscript(record.entries?.length > 0 ? record.entries : getDefaultTranscriptEntries(record.language || 'en'));
       setSelectedLanguage(record.language || 'en');
     } else {
-      // If no record found, show default English transcript
       setTranscript(getDefaultTranscriptEntries('en'));
       setSelectedLanguage('en');
     }
   }, [recordId]);
 
-  // Update transcript when language changes
   useEffect(() => {
     if (caseMetadata) {
       let baseEntries = caseMetadata.entries?.length > 0 ? caseMetadata.entries : getDefaultTranscriptEntries('en');
-
-      // Ensure all entries have English base text and translate to selected language
-      const translatedEntries = baseEntries.map(entry => {
-        // Get the original English text (use originalText if available, otherwise assume entry.text is base English)
+      const translatedEntries = baseEntries.map((entry: any) => {
         const englishBaseText = entry.originalText || entry.text;
         const displayText = selectedLanguage === 'en' ? englishBaseText : getTranslation(englishBaseText, selectedLanguage) || englishBaseText;
-
-        return {
-          ...entry,
-          text: displayText,
-          language: selectedLanguage
-        };
+        return { ...entry, text: displayText, language: selectedLanguage };
       });
       setTranscript(translatedEntries);
     } else {
-      // Handle fallback case
       const baseEntries = getDefaultTranscriptEntries('en');
       const translatedEntries = baseEntries.map(entry => ({
         ...entry,
@@ -96,7 +76,6 @@ const TranscriptView = () => {
     }
   }, [selectedLanguage, caseMetadata]);
 
-  // Filter transcript based on search
   const filteredTranscript = transcript.filter(entry =>
     entry.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
     entry.speaker.toLowerCase().includes(searchQuery.toLowerCase())
@@ -107,60 +86,60 @@ const TranscriptView = () => {
     // @ts-ignore
     legalKeywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-      highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded text-yellow-900 dark:text-yellow-100">${keyword}</mark>`);
+      highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-900/40 px-1 rounded text-yellow-900 dark:text-yellow-100 font-medium">${keyword}</mark>`);
     });
     return highlightedText;
   };
 
-  const handleDownload = (format: 'pdf' | 'txt') => {
-    console.log(`Downloading transcript ${recordId} as ${format}`);
-    // Here you would implement the actual download functionality
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Transcript - ${caseMetadata?.caseTitle}`,
-        text: `Court transcript for ${caseMetadata?.caseNumber}`,
-        url: window.location.href
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
-
+  const handlePrint = () => window.print();
 
   return (
-    <div className="min-h-screen bg-background p-8 animate-fade-in">
-      {/* Hero Header */}
-      <div className="text-left mb-8">
-        <div className="absolute inset-0 justice-pattern -z-10 opacity-30" />
-        <div className="flex items-center gap-4 mb-4">
-          <Button variant="outline" size="sm" onClick={() => navigate('/clerk/transcription')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+    <div className="min-h-screen bg-[#F9F9FC] dark:bg-background p-6 animate-fade-in font-sans">
+      {/* Top Navigation */}
+      <div className="flex items-center justify-between mb-8">
+        <Button variant="ghost" className="text-muted-foreground hover:text-primary pl-0" onClick={() => navigate('/clerk/transcription')}>
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Transcripts
+        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" className="bg-white">
+            <Share className="w-4 h-4 mr-2" />
+            Share
+          </Button>
+          <Button variant="outline" size="sm" className="bg-white" onClick={handlePrint}>
+            <Printer className="w-4 h-4 mr-2" />
+            Print
+          </Button>
+          <Button size="sm" className="bg-[#0047BA] hover:bg-[#003da0] text-white shadow-sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export PDF
           </Button>
         </div>
-        <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3 tracking-tight">
-          Transcript Details
-        </h1>
-        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-          Case {caseMetadata?.caseNumber || 'Default'} • {caseMetadata?.date ? new Date(caseMetadata.date).toLocaleDateString() : 'Recent'}
-        </p>
       </div>
 
-      {/* Action Bar */}
-      <div className="flex items-center justify-between mb-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-3">
+            <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md px-2 py-0.5 text-xs font-semibold">
+              Transcription Complete
+            </Badge>
+            <span className="text-xs font-semibold text-muted-foreground tracking-wide uppercase">
+              CASE #{caseMetadata?.caseNumber || '2025-CR-023'}
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2 tracking-tight">
+            State vs. Ahmed Al-Mansoor
+          </h1>
+          <p className="text-sm text-gray-500">
+            Official court record of proceedings held on {caseMetadata?.date ? new Date(caseMetadata.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : 'Wednesday, January 15, 2025'}
+          </p>
+        </div>
+
         <div className="flex items-center gap-2">
           <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-            <SelectTrigger className="w-40">
-              <Globe className="w-4 h-4 mr-2" />
+            <SelectTrigger className="w-40 bg-white border-gray-200">
+              <Globe className="w-4 h-4 mr-2 text-gray-500" />
               <SelectValue placeholder="Select Language" />
             </SelectTrigger>
             <SelectContent>
@@ -169,131 +148,166 @@ const TranscriptView = () => {
               <SelectItem value="hi">हिंदी</SelectItem>
             </SelectContent>
           </Select>
-          <Badge variant="outline" className="text-sm">
-            {getLanguageDisplayName(selectedLanguage)}
-          </Badge>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleShare}>
-            <Share className="w-4 h-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm" onClick={handlePrint}>
-            <Printer className="w-4 h-4 mr-2" />
-            Print
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => handleDownload('pdf')}>
-            <Download className="w-4 h-4 mr-2" />
-            PDF
-          </Button>
         </div>
       </div>
 
-      {/* Case Metadata Card */}
-      <Card className="court-card mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="w-5 h-5 text-accent" />
-            Case Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="space-y-1">
-              <Label className="text-sm font-medium text-muted-foreground">Case Title</Label>
-              <p className="text-sm font-medium text-foreground">{caseMetadata?.caseTitle || 'Default Court Session'}</p>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <Card className="border-none shadow-sm bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+              <User className="w-5 h-5 text-blue-600" />
             </div>
-            <div className="space-y-1">
-              <Label className="text-sm font-medium text-muted-foreground">Date</Label>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground">{caseMetadata?.date ? new Date(caseMetadata.date).toLocaleDateString() : 'Recent Session'}</p>
-              </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">PRESIDING JUDGE</p>
+              <p className="text-sm font-semibold text-gray-900">Hon. Sarah Cohen</p>
             </div>
-            <div className="space-y-1">
-              <Label className="text-sm font-medium text-muted-foreground">Duration</Label>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground">{caseMetadata?.duration || 'Variable'}</p>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-sm font-medium text-muted-foreground">Clerk Name</Label>
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground">{caseMetadata?.clerkName || 'N/A'}</p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Transcript Card */}
-      <Card className="court-card">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Languages className="w-5 h-5 text-accent" />
-              Full Transcript
-            </CardTitle>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search transcript..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2 border border-border rounded-md bg-background text-sm w-64"
-                />
-              </div>
-              <Badge variant="outline">
-                {filteredTranscript.length} of {transcript.length} entries
+        <Card className="border-none shadow-sm bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">DURATION</p>
+              <p className="text-sm font-semibold text-gray-900">{caseMetadata?.duration || '02:15:30'}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-none shadow-sm bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">RECORD TYPE</p>
+              <p className="text-sm font-semibold text-gray-900">Official Transcript</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-none shadow-sm bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
+              <Activity className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">CONFIDENCE SCORE</p>
+              <p className="text-sm font-semibold text-gray-900">98.5% Accuracy</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* Left Column: Transcript */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-4">
+              <h2 className="text-lg font-bold text-gray-900">Transcript Record</h2>
+              <Badge variant="outline" className="text-gray-500 border-gray-200 font-normal">
+                {transcript.length} lines
               </Badge>
             </div>
+            <div className="relative w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search in transcript..."
+                className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[600px] pr-4">
-            <div className="space-y-4">
-              {filteredTranscript.map((entry) => (
-                <div
-                  key={entry.id}
-                  className="p-4 bg-muted/30 rounded-lg border border-border hover:bg-muted/40 transition-colors"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <Badge className={speakerColors[entry.speaker]}>
-                      {entry.speaker}
-                    </Badge>
-                    <span className="text-xs font-mono text-muted-foreground">
-                      {entry.timestamp}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <CheckCircle className="w-3 h-3 text-green-500" />
-                      <span className="text-xs text-muted-foreground">
-                        {entry.confidence}% accurate
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{
-                      __html: highlightLegalKeywords(entry.text)
-                    }}
-                  />
-                </div>
-              ))}
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[800px] relative overflow-hidden">
+            {/* Watermark / Header */}
+            <div className="border-b border-gray-100 bg-gray-50/50 p-4 flex justify-between items-center text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-6">
+              <span>Official Court Record • {caseMetadata?.caseNumber}</span>
+              <span>Page 1 of 1</span>
             </div>
 
-            {transcript.length === 0 && (
-              <div className="text-center py-12">
-                <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No transcript entries available.</p>
+            <ScrollArea className="h-[750px] px-8 py-2">
+              <div className="space-y-8 pb-12">
+                {filteredTranscript.map((entry, index) => (
+                  <div key={index} className="group">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge className={`${speakerColors[entry.speaker]} px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border-none`}>
+                        {entry.speaker}
+                      </Badge>
+                      <span className="text-[10px] font-mono text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {entry.timestamp}
+                      </span>
+                    </div>
+                    <p
+                      className="text-[15px] leading-relaxed text-gray-700 font-medium"
+                      dangerouslySetInnerHTML={{ __html: highlightLegalKeywords(entry.text) }}
+                    />
+                  </div>
+                ))}
               </div>
-            )}
-          </ScrollArea>
-        </CardContent>
-      </Card>
+            </ScrollArea>
+          </div>
+        </div>
+
+        {/* Right Column: Sidebar */}
+        <div className="space-y-6">
+
+          {/* Bookmarked Moments */}
+          <Card className="border-none shadow-sm bg-white">
+            <CardContent className="p-0">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+                <Bookmark className="w-4 h-4 text-blue-600" />
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Bookmarked Moments</h3>
+              </div>
+              <div className="p-4 space-y-4">
+                {[
+                  { time: '09:15:45', speaker: 'Lawyer', text: 'Your Honor, we wish to present evidence regarding...' },
+                  { time: '09:16:50', speaker: 'Lawyer', text: 'Yes, Your Honor. We have objections to its admissibility...' }
+                ].map((bookmark, i) => (
+                  <div key={i} className="bg-gray-50 rounded-lg p-3 hover:bg-blue-50 transition-colors cursor-pointer group border border-transparent hover:border-blue-100">
+                    <div className="flex justify-between items-center mb-1.5">
+                      <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-[10px] px-1.5 py-0 h-5 border-none font-bold">
+                        {bookmark.speaker}
+                      </Badge>
+                      <span className="text-[10px] font-mono text-gray-400">{bookmark.time}</span>
+                    </div>
+                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                      "{bookmark.text}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Legal Keywords */}
+          <Card className="border-none shadow-sm bg-white">
+            <CardContent className="p-0">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+                <Gavel className="w-4 h-4 text-purple-600" />
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Legal Keywords</h3>
+              </div>
+              <div className="p-4">
+                <div className="flex flex-wrap gap-2">
+                  {['objection', 'sustained', 'witness', 'adjourned', 'evidence', 'testimony', 'discovery', 'admissible', 'authentication', 'foundation'].map((word) => (
+                    <span key={word} className="px-2.5 py-1 rounded-md bg-purple-50 text-purple-700 text-xs font-medium hover:bg-purple-100 cursor-pointer transition-colors">
+                      {word}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+        </div>
+      </div>
     </div>
   );
 };
