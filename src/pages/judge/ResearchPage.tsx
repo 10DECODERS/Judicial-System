@@ -333,7 +333,7 @@ export default function LegalResearchPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Side - Document Viewer */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="court-card">
+            <Card className="bg-card border border-border shadow-sm rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="w-5 h-5" />
@@ -364,7 +364,7 @@ export default function LegalResearchPage() {
 
           {/* Right Side - AI Chat */}
           <div className="space-y-6">
-            <Card className="court-card">
+            <Card className="bg-card border border-border shadow-sm rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageCircle className="w-5 h-5" />
@@ -422,13 +422,13 @@ export default function LegalResearchPage() {
 
         {/* Bottom - Search Results as Cards */}
         <div className="mt-12">
-          <h3 className="text-2xl font-semibold mb-6">Search Results</h3>
+          <h3 className="text-xl font-semibold mb-6">Search Results</h3>
           <div className="space-y-6">
             {currentResults.map((caseItem) => (
               <Card
                 key={caseItem.id}
                 className={cn(
-                  "court-card hover:shadow-lg transition-all cursor-pointer",
+                  "bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-all cursor-pointer",
                   selectedCase.id === caseItem.id ? "ring-2 ring-accent" : ""
                 )}
                 onClick={() => handleCaseClick(caseItem)}
@@ -477,7 +477,7 @@ export default function LegalResearchPage() {
           </div>
         </div>
         {/* Judicial Advisory Notice */}
-        <Card className="court-card border-l-amber-500/80 bg-gradient-to-r from-amber-50/50 to-orange-50/30 dark:from-amber-950/20 dark:to-orange-950/10 mt-8 mb-8">
+        <Card className="bg-card border border-border shadow-sm rounded-xl mt-8 mb-8">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-3 text-xl text-foreground">
               <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />
@@ -501,10 +501,10 @@ export default function LegalResearchPage() {
       {/* Header */}
       <div className="text-left mb-8">
         <div className="absolute inset-0 justice-pattern -z-10 opacity-30" />
-        <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">
+        <h1 className="text-2xl font-display font-bold text-foreground mb-2 tracking-tight">
           Legal Research Assistant
         </h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           Advanced AI-powered legal research with comprehensive case law analysis and statutory references
         </p>
       </div>
@@ -513,9 +513,9 @@ export default function LegalResearchPage() {
         {/* Sidebar */}
         <div className="xl:col-span-1 space-y-6">
           {/* Search Controls */}
-          <Card className="court-card">
+          <Card className="bg-card border border-border shadow-sm rounded-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <Search className="w-5 h-5" />
                 Legal Database Search
               </CardTitle>
@@ -621,9 +621,9 @@ export default function LegalResearchPage() {
           </Card>
 
           {/* Research Analytics */}
-          <Card className="court-card">
+          <Card className="bg-card border border-border shadow-sm rounded-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <TrendingUp className="w-5 h-5" />
                 Research Metrics
               </CardTitle>
@@ -651,9 +651,9 @@ export default function LegalResearchPage() {
           </Card>
 
           {/* Quick Stats */}
-          <Card className="court-card">
+          <Card className="bg-card border border-border shadow-sm rounded-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <Star className="w-5 h-5" />
                 Quick Access
               </CardTitle>
@@ -695,7 +695,7 @@ export default function LegalResearchPage() {
                 <>
                   <div className="flex justify-between items-center">
                     <div>
-                      <h2 className="text-2xl font-semibold">Judicial Precedents</h2>
+                      <h2 className="text-xl font-semibold">Judicial Precedents</h2>
                       <p className="text-muted-foreground">Relevant court decisions and case law</p>
                     </div>
                   </div>
@@ -705,7 +705,7 @@ export default function LegalResearchPage() {
                       {currentResults.map((caseItem) => (
                         <Card
                           key={caseItem.id}
-                          className="court-card hover:shadow-lg transition-all cursor-pointer"
+                          className="bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-all cursor-pointer"
                           onClick={() => handleCaseClick(caseItem)}
                         >
                           <CardContent className="p-6">

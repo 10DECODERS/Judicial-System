@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Play, Pause, Search, Download, Bookmark, Globe, StickyNote, Clock, Eye, User } from 'lucide-react';
+import { Play, Pause, Search, Download, Bookmark, Globe, StickyNote, Clock, Eye, User, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,6 +32,7 @@ import {
 export default function TranscriptsPage() {
   const [selectedLanguage, setSelectedLanguage] = useState('multiple');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>([]);
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
@@ -66,14 +68,35 @@ export default function TranscriptsPage() {
     }
   };
 
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const pageIds = paginatedRecords.map(r => r.id);
+      setSelectedRecordIds(prev => Array.from(new Set([...prev, ...pageIds])));
+    } else {
+      const pageIds = paginatedRecords.map(r => r.id);
+      setSelectedRecordIds(prev => prev.filter(id => !pageIds.includes(id)));
+    }
+  };
+
+  const handleSelectOne = (checked: boolean, id: string) => {
+    if (checked) {
+      setSelectedRecordIds(prev => [...prev, id]);
+    } else {
+      setSelectedRecordIds(prev => prev.filter(selectedId => selectedId !== id));
+    }
+  };
+
+  const isAllPageSelected = paginatedRecords.length > 0 && paginatedRecords.every(r => selectedRecordIds.includes(r.id));
+  const isPageIndeterminate = paginatedRecords.some(r => selectedRecordIds.includes(r.id)) && !isAllPageSelected;
+
   return (
-    <div className="h-full bg-[hsl(var(--main-bg))] p-6 animate-fade-in">
+    <div className="h-full bg-background p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">Courtroom Transcripts</h1>
-            <p className="text-lg text-muted-foreground">View and review completed courtroom transcription records</p>
+            <h1 className="text-2xl font-display font-bold text-foreground mb-1 tracking-tight">Courtroom Transcripts</h1>
+            <p className="text-sm text-muted-foreground">View and review completed courtroom transcription records</p>
           </div>
           <div className="flex items-center gap-3">
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
@@ -106,14 +129,14 @@ export default function TranscriptsPage() {
                 <Eye className="w-6 h-6 text-emerald-600" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-headings">{allRecords.length}</p>
-                <p className="text-xs text-body">Total Records</p>
+                <p className="text-2xl font-semibold text-foreground">{allRecords.length}</p>
+                <p className="text-xs text-muted-foreground">Total Records</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="court-card hover:-translate-y-0.5 transition-all duration-200">
+        <Card className="bg-card border border-border shadow-sm rounded-xl hover:-translate-y-0.5 transition-all duration-200">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -123,7 +146,7 @@ export default function TranscriptsPage() {
                 <p className="text-2xl font-semibold text-headings">
                   {new Set(allRecords.map(r => r.language)).size}
                 </p>
-                <p className="text-xs text-body">Languages</p>
+                <p className="text-xs text-muted-foreground">Languages</p>
               </div>
             </div>
           </CardContent>
@@ -139,7 +162,7 @@ export default function TranscriptsPage() {
                 <p className="text-2xl font-semibold text-headings">
                   {new Set(allRecords.map(r => r.clerkName)).size}
                 </p>
-                <p className="text-xs text-body">Court Clerks</p>
+                <p className="text-xs text-muted-foreground">Court Clerks</p>
               </div>
             </div>
           </CardContent>
@@ -155,7 +178,7 @@ export default function TranscriptsPage() {
                 <p className="text-2xl font-semibold text-headings">
                   {Math.round(allRecords.reduce((acc, r) => acc + parseInt(r.duration.split(':')[0]) * 60 + parseInt(r.duration.split(':')[1]), 0) / 60)}h
                 </p>
-                <p className="text-xs text-body">Total Hours</p>
+                <p className="text-xs text-muted-foreground">Total Hours</p>
               </div>
             </div>
           </CardContent>
@@ -163,46 +186,62 @@ export default function TranscriptsPage() {
       </div>
 
       {/* Transcription Records Table */}
-      <Card className="court-card mb-6">
+      <Card className="bg-card border border-border shadow-sm rounded-xl mb-6">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-xl text-headings">Transcription Records</CardTitle>
-              <CardDescription className="text-sm text-body mt-1">
+              <CardTitle className="text-xl text-foreground">Transcription Records</CardTitle>
+              <CardDescription className="text-sm text-muted-foreground mt-1">
                 {selectedLanguage === 'multiple' ? allRecords.length : allRecords.filter(record => record.language === selectedLanguage).length} of {allRecords.length} total records
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border border-borders">
+          <div className="rounded-xl border border-borders overflow-hidden shadow-sm">
             <Table>
               <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="w-[13%] text-headings">Case Number</TableHead>
-                  <TableHead className="w-[19%] text-headings">Case Title</TableHead>
-                  <TableHead className="w-[11%] text-headings">Date</TableHead>
-                  <TableHead className="w-[11%] text-headings">Duration</TableHead>
-                  <TableHead className="w-[13%] text-headings">Language</TableHead>
-                  <TableHead className="w-[13%] text-headings">Clerk</TableHead>
-                  <TableHead className="w-[11%] text-headings">File Size</TableHead>
-                  <TableHead className="w-[9%] text-center text-headings">Actions</TableHead>
+                <TableRow className="hover:bg-transparent border-b border-border">
+                  <TableHead className="w-[50px]">
+                    <Checkbox
+                      checked={isAllPageSelected || (isPageIndeterminate ? "indeterminate" : false)}
+                      onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
+                    />
+                  </TableHead>
+                  <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Case Number</TableHead>
+                  <TableHead className="w-[19%] text-xs font-semibold text-muted-foreground">Case Title</TableHead>
+                  <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">Date</TableHead>
+                  <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">Duration</TableHead>
+                  <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Language</TableHead>
+                  <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Clerk</TableHead>
+                  <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">File Size</TableHead>
+                  <TableHead className="w-[9%] text-center text-xs font-semibold text-muted-foreground">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedRecords.map((record) => (
-                  <TableRow key={record.id} className="hover:bg-accent/5 transition-colors">
-                    <TableCell className="font-medium text-body">{record.caseNumber}</TableCell>
+                  <TableRow
+                    key={record.id}
+                    className="hover:bg-accent/5 transition-colors border-b last:border-0 border-border"
+                    data-state={selectedRecordIds.includes(record.id) ? "selected" : undefined}
+                  >
                     <TableCell>
-                      <div className="max-w-xs truncate text-body" title={record.caseTitle}>
+                      <Checkbox
+                        checked={selectedRecordIds.includes(record.id)}
+                        onCheckedChange={(checked) => handleSelectOne(checked as boolean, record.id)}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium text-[#0047BA] dark:text-blue-400">{record.caseNumber}</TableCell>
+                    <TableCell>
+                      <div className="max-w-xs truncate text-muted-foreground" title={record.caseTitle}>
                         {record.caseTitle}
                       </div>
                     </TableCell>
-                    <TableCell className="text-body">
+                    <TableCell className="text-muted-foreground">
                       {new Date(record.date).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-body">
+                      <div className="flex items-center gap-2 text-muted-foreground">
                         <Clock className="w-4 h-4 text-muted-foreground" />
                         {record.duration}
                       </div>
@@ -219,19 +258,38 @@ export default function TranscriptsPage() {
                             record.language === 'ar' ? 'العربية' : 'Unknown'}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-body">{record.clerkName}</TableCell>
-                    <TableCell className="text-sm text-body">
+                    <TableCell className="text-muted-foreground">{record.clerkName}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
                       {record.fileSize}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewTranscript(record.id)}
-                        className="h-8 w-8 p-0 border-borders hover:bg-accent/10 transition-all"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleViewTranscript(record.id)}
+                          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                          title="View"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-blue-600"
+                          title="Edit"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -296,7 +354,7 @@ export default function TranscriptsPage() {
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
-              <p className="text-sm text-body text-center mt-2">
+              <p className="text-sm text-muted-foreground text-center mt-2">
                 Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
               </p>
             </div>
@@ -308,7 +366,7 @@ export default function TranscriptsPage() {
       {/* Read-Only Notice */}
       <Card className="border-accent/20 bg-accent/5">
         <CardContent className="p-4">
-          <p className="text-xs text-body">
+          <p className="text-xs text-muted-foreground">
             <strong className="text-primary">Judge Access Notice:</strong> You have read-only access to view and review transcription records. Any official transcription work must be performed by court clerks.
           </p>
         </CardContent>

@@ -9,8 +9,10 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Professional Blue Palette */
-    --background: 210 20% 98%;    /* Very light grey/blue background */
-    --foreground: 222 47% 11%;    /* Dark navy text */
+    --background: 210 20% 98%;
+    /* Very light grey/blue background */
+    --foreground: 222 47% 11%;
+    /* Dark navy text */
 
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
@@ -18,7 +20,8 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 217.7 96.8% 37.1%;       /* #0347ba */
+    --primary: 217.7 96.8% 37.1%;
+    /* #0347ba */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -40,7 +43,8 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     /* Sidebar - Deep Navy/Blue */
-    --sidebar-background: 0 0% 100%; /* White Sidebar based on image example having white/light sidebar usually, or maybe user wants dark? "Professional" often implies light sidebar these days or dark. Image 1 shows dark blue header and light content. Wait, looking at the user uploads names... I can't see them. I will assume a clear white sidebar for a clean look or a contained dark one. Let's go with White Sidebar, Dark Text as it is very modern and flexible. */
+    --sidebar-background: 0 0% 100%;
+    /* White Sidebar based on image example having white/light sidebar usually, or maybe user wants dark? "Professional" often implies light sidebar these days or dark. Image 1 shows dark blue header and light content. Wait, looking at the user uploads names... I can't see them. I will assume a clear white sidebar for a clean look or a contained dark one. Let's go with White Sidebar, Dark Text as it is very modern and flexible. */
     /* Wait, the user said "change the color and add a sidebar update the component style to match the images".
        Without seeing the images, I have to guess slightly or use standard safe choices.
        However, the previous config had a dark sidebar.
@@ -54,7 +58,8 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 214 32% 91%;
     --sidebar-ring: 217.7 96.8% 37.1%;
-    --sidebar-active: 217.7 96.8% 37.1%; /* Active item text color or bg */
+    --sidebar-active: 217.7 96.8% 37.1%;
+    /* Active item text color or bg */
   }
 
   .dark {
@@ -105,24 +110,44 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-size: 14px; /* Reset to standard size for professional apps */
+    font-size: 14px;
+    /* Reset to standard size for professional apps */
     line-height: normal;
-    margin: 0; /* Remove side margins for full-width layout */
+    margin: 0;
+    /* Remove side margins for full-width layout */
   }
-  
+
   /* Reset Headings */
-  h1 { @apply text-3xl font-bold; }
-  h2 { @apply text-2xl font-semibold; }
-  h3 { @apply text-xl font-semibold; }
-  h4 { @apply text-lg font-medium; }
-  h5 { @apply text-base font-medium; }
-  h6 { @apply text-sm font-medium; }
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+  }
+
+  h4 {
+    @apply text-lg font-medium;
+  }
+
+  h5 {
+    @apply text-base font-medium;
+  }
+
+  h6 {
+    @apply text-sm font-medium;
+  }
 }
 
 @layer utilities {
+
   /* Modern Justice gradients */
   .court-gradient {
-    @apply bg-gradient-to-b from-primary to-[hsl(220,53%,16%)];
+    background-image: linear-gradient(to bottom, hsl(var(--primary)), hsl(220, 53%, 16%));
   }
 
   .court-gold-gradient {
@@ -130,13 +155,12 @@ All colors MUST be HSL.
   }
 
   .court-hero {
-    @apply bg-gradient-to-br from-primary to-[hsl(220,53%,16%)];
+    background-image: linear-gradient(to bottom right, hsl(var(--primary)), hsl(220, 53%, 16%));
   }
 
   /* Professional card effects */
   .court-card {
-    @apply bg-card border-l-4 border-l-accent rounded-lg;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    @apply bg-card border border-border shadow-sm rounded-xl;
   }
 
   .card-hover {
@@ -158,12 +182,14 @@ All colors MUST be HSL.
   }
 
   .status-approved {
-    @apply bg-[hsl(151,81%,90%)] text-[hsl(160,84%,39%)] border border-[hsl(160,84%,39%)]/20;
+    background-color: hsl(151, 81%, 90%);
+    color: hsl(160, 84%, 39%);
+    border: 1px solid hsla(160, 84%, 39%, 0.2);
   }
 
   /* Justice-themed background patterns */
   .justice-pattern {
-    background-image: 
+    background-image:
       radial-gradient(circle at 20% 50%, hsl(var(--accent)) 0%, transparent 50%),
       radial-gradient(circle at 80% 80%, hsl(var(--accent)) 0%, transparent 50%);
     opacity: 0.05;
@@ -179,12 +205,26 @@ All colors MUST be HSL.
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }

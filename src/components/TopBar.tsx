@@ -27,7 +27,7 @@ export const TopBar = ({ toggleSidebar, isSidebarCollapsed }: TopBarProps) => {
   };
 
   return (
-    <header className="h-20 border-b border-primary-foreground/10 bg-primary shadow-sm sticky top-0 z-10 px-6 flex items-center justify-between gap-4 transition-all duration-300">
+    <header className="h-[72px] box-border py-4 border-b border-white/10 bg-primary shadow-sm sticky top-0 z-10 px-6 flex items-center justify-between gap-4 transition-all duration-300">
 
       {/* Left: Sidebar Toggle */}
       <div className="flex items-center">
@@ -42,17 +42,17 @@ export const TopBar = ({ toggleSidebar, isSidebarCollapsed }: TopBarProps) => {
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         {/* Search Icon */}
-        <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full">
-          <Search className="w-5 h-5" strokeWidth={3} />
+        <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full w-10 h-10">
+          <Search className="w-6 h-6" strokeWidth={2.5} />
         </Button>
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full">
+        <Button variant="ghost" size="icon" className="relative text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full w-10 h-10">
           <Bell className="w-6 h-6" strokeWidth={2.5} />
           <Badge
-            className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center p-0 text-[10px] bg-red-500 text-white rounded-full border-2 border-primary"
+            className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center p-0 text-[10px] bg-red-500 text-white rounded-full border-2 border-primary"
           >
             2
           </Badge>
@@ -66,7 +66,7 @@ export const TopBar = ({ toggleSidebar, isSidebarCollapsed }: TopBarProps) => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-3 pl-2 pr-4 hover:bg-primary-foreground/10 rounded-full border border-transparent hover:border-primary-foreground/10 transition-all h-auto py-1.5">
               <div className="relative">
-                <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-foreground/20 shadow-sm">
+                <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-primary-foreground/20 shadow-sm">
                   <img
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100"
                     alt={user?.username}

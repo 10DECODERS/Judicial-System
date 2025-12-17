@@ -31,15 +31,15 @@ const JudgeDashboardHome = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-gradient-to-br from-background to-muted/20 p-8 animate-fade-in">
+    <div className="p-8 animate-fade-in min-h-screen">
       {/* Hero Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-display font-bold text-foreground mb-2 tracking-tight">
+            <h1 className="text-2xl font-display font-bold text-foreground mb-2 tracking-tight">
               Judge Dashboard
             </h1>
-            <p className="text-lg text-muted-foreground">Welcome back, Your Honor. Here's your case overview for today.</p>
+            <p className="text-sm text-muted-foreground">Welcome back, Your Honor. Here's your case overview for today.</p>
           </div>
           <div className="flex items-center gap-4">
             <Badge variant="outline" className="px-4 py-2 text-sm">
@@ -53,12 +53,12 @@ const JudgeDashboardHome = () => {
       {/* Key Statistics */}
       {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-4">
-            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-3">
+        <Card className="bg-card border-none shadow-sm rounded-xl hover:shadow-md transition-all duration-300">
+          <CardContent className="p-5 flex flex-col gap-2">
+            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
               <Scale className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Active Cases</p>
+            <p className="text-xs text-muted-foreground">Active Cases</p>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-foreground">24</span>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Total</span>
@@ -66,12 +66,12 @@ const JudgeDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-3">
+        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-5 flex flex-col gap-2">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
               <Calendar className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Pending Hearings</p>
+            <p className="text-xs text-muted-foreground">Pending Hearings</p>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-foreground">8</span>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Scheduled</span>
@@ -79,12 +79,12 @@ const JudgeDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-4">
-            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center mb-3">
+        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-5 flex flex-col gap-2">
+            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
               <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Urgent Matters</p>
+            <p className="text-xs text-muted-foreground">Urgent Matters</p>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-foreground">3</span>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Action Req</span>
@@ -92,12 +92,12 @@ const JudgeDashboardHome = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-4">
-            <div className="w-12 h-12 rounded-full bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center mb-3">
+        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
+          <CardContent className="p-5 flex flex-col gap-2">
+            <div className="w-12 h-12 rounded-full bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center">
               <TrendingUp className="w-6 h-6 text-violet-600 dark:text-violet-400" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Research Queries</p>
+            <p className="text-xs text-muted-foreground">Research Queries</p>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold text-foreground">12</span>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">Active</span>
@@ -108,7 +108,7 @@ const JudgeDashboardHome = () => {
 
       {/* Today's Schedule */}
       <div className="mb-8">
-        <h3 className="text-2xl font-display font-semibold mb-4 text-foreground">Today's Schedule</h3>
+        <h3 className="text-xl font-display font-semibold mb-4 text-foreground">Today's Schedule</h3>
         <Card className="bg-card">
           <CardContent className="p-6">
             <div className="space-y-4">
@@ -149,7 +149,7 @@ const JudgeDashboardHome = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <Card className="bg-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-xl">
               <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               Recent Cases
             </CardTitle>
@@ -159,8 +159,8 @@ const JudgeDashboardHome = () => {
               {mockTranscriptionRecords.slice(0, 3).map((record, index) => (
                 <div key={record.id} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
                   <div>
-                    <p className="font-medium">{record.caseTitle}</p>
-                    <p className="text-sm text-muted-foreground">Case #{record.caseNumber}</p>
+                    <p className="font-medium text-sm text-foreground">{record.caseTitle}</p>
+                    <p className="text-xs text-[#0047BA] dark:text-blue-400 font-medium">Case #{record.caseNumber}</p>
                   </div>
                   <Badge className={
                     index === 0 ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200" :
@@ -177,7 +177,7 @@ const JudgeDashboardHome = () => {
 
         <Card className="bg-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-xl">
               <Users className="w-5 h-5 text-rose-600 dark:text-rose-400" />
               Court Statistics
             </CardTitle>
@@ -220,7 +220,7 @@ const JudgeDashboardHome = () => {
       </div>
 
       {/* Judicial Advisory Notice */}
-      <Card className="court-card border-l-amber-500/80 bg-card mb-8">
+      <Card className="bg-card border border-border shadow-sm rounded-xl mb-8">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-3 text-xl text-foreground">
             <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />

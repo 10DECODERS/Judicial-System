@@ -373,10 +373,10 @@ const TranscriptDetailView = () => {
                   Case #{caseMetadata?.caseNumber || 'Unknown'}
                 </span>
               </div>
-              <h1 className="text-4xl font-display font-bold text-foreground tracking-tight mb-2">
+              <h1 className="text-2xl font-display font-bold text-foreground tracking-tight mb-2">
                 {caseMetadata?.caseTitle || 'Transcript Review'}
               </h1>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-muted-foreground text-sm">
                 Official court record of proceedings held on {caseMetadata ? new Date(caseMetadata.hearingDate).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown Date'}
               </p>
             </div>
@@ -518,7 +518,7 @@ const TranscriptDetailView = () => {
           <div className="col-span-12 lg:col-span-4 space-y-6">
 
             {/* Quick Actions Card */}
-            <Card className="court-card border-l-4 border-l-primary/40">
+            <Card className="bg-card border border-border shadow-sm rounded-xl">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-primary" />
@@ -553,7 +553,7 @@ const TranscriptDetailView = () => {
             </Card>
 
             {/* Legal Analysis Card */}
-            <Card className="court-card border-l-4 border-l-violet-500/40">
+            <Card className="bg-card border border-border shadow-sm rounded-xl">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                   <Scale className="w-4 h-4 text-violet-600" />
@@ -572,7 +572,7 @@ const TranscriptDetailView = () => {
             </Card>
 
             {/* Judge's Private Notes */}
-            <Card className="court-card border-l-4 border-l-amber-500/40">
+            <Card className="bg-card border border-border shadow-sm rounded-xl">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
                   <StickyNote className="w-4 h-4 text-amber-600" />
