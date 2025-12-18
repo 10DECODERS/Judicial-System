@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -318,22 +318,34 @@ export default function LegalResearchPage() {
 
   if (selectedCase) {
     return (
-      <div className="min-h-screen bg-background p-8 animate-fade-in">
-        <div className="flex gap-2 mb-6">
-          <Button
-            variant="outline"
-            onClick={() => setSelectedCase(null)}
-            className="flex items-center gap-2"
-          >
-            <ChevronRight className="w-4 h-4 rotate-180" />
-            Back to Search Results
-          </Button>
+      <div className="min-h-screen bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Legal Research Assistant</h1>
+            <div className="flex items-center text-sm font-medium gap-2">
+              <Link to="/judge" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <Link to="/judge/research" className="text-primary hover:underline cursor-pointer" onClick={() => setSelectedCase(null)}>Legal Research</Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-slate-500 font-semibold truncate max-w-[300px]">{selectedCase.title}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              className="h-10 border-slate-200 bg-white text-slate-600 font-medium px-4 shadow-sm"
+              onClick={() => setSelectedCase(null)}
+            >
+              Back to Search Results
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Side - Document Viewer */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="bg-card border border-border shadow-sm rounded-xl">
+            <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="w-5 h-5" />
@@ -364,7 +376,7 @@ export default function LegalResearchPage() {
 
           {/* Right Side - AI Chat */}
           <div className="space-y-6">
-            <Card className="bg-card border border-border shadow-sm rounded-xl">
+            <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageCircle className="w-5 h-5" />
@@ -428,7 +440,7 @@ export default function LegalResearchPage() {
               <Card
                 key={caseItem.id}
                 className={cn(
-                  "bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-all cursor-pointer",
+                  "bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl hover:shadow-lg transition-all cursor-pointer",
                   selectedCase.id === caseItem.id ? "ring-2 ring-accent" : ""
                 )}
                 onClick={() => handleCaseClick(caseItem)}
@@ -476,18 +488,20 @@ export default function LegalResearchPage() {
             ))}
           </div>
         </div>
-        {/* Judicial Advisory Notice */}
-        <Card className="bg-card border border-border shadow-sm rounded-xl mt-8 mb-8">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-3 text-xl text-foreground">
-              <Scale className="w-6 h-6 text-amber-600 dark:text-amber-500" />
+      /* Judicial Advisory Notice */
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl mt-8 mb-8 border-l-4 border-l-amber-500">
+          <CardHeader className="pb-4 bg-white border-b border-slate-50">
+            <CardTitle className="flex items-center gap-3 text-xl font-bold text-slate-800">
+              <div className="p-2 bg-amber-50 rounded-lg">
+                <Scale className="w-6 h-6 text-amber-600" />
+              </div>
               Judicial Advisory Notice
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-6">
-              <p className="text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
-                <strong className="font-semibold text-amber-900 dark:text-amber-100">Advisory Only:</strong> This AI-powered legal research assistant provides search results, case summaries, and analytical insights for informational purposes only. All research findings must be verified by qualified legal professionals, reviewed for current applicability to specific facts and jurisdictions, and cross-referenced with primary legal sources before any judicial application or decision-making. The automated analysis and recommendations are not a substitute for professional legal judgment.
+          <CardContent className="p-6">
+            <div className="bg-amber-50/50 border border-amber-100 rounded-xl p-5">
+              <p className="text-base text-slate-700 leading-relaxed">
+                <strong className="font-bold text-amber-900">Advisory Only:</strong> This AI-powered legal research assistant provides search results, case summaries, and analytical insights for informational purposes only. All research findings must be verified by qualified legal professionals, reviewed for current applicability to specific facts and jurisdictions, and cross-referenced with primary legal sources before any judicial application or decision-making. The automated analysis and recommendations are not a substitute for professional legal judgment.
               </p>
             </div>
           </CardContent>
@@ -497,23 +511,24 @@ export default function LegalResearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-8 animate-fade-in">
-      {/* Header */}
-      <div className="text-left mb-8">
-        <div className="absolute inset-0 justice-pattern -z-10 opacity-30" />
-        <h1 className="text-2xl font-display font-bold text-foreground mb-2 tracking-tight">
-          Legal Research Assistant
-        </h1>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          Advanced AI-powered legal research with comprehensive case law analysis and statutory references
-        </p>
+    <div className="min-h-screen bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-display font-bold text-slate-800 tracking-tight">Legal Research Assistant</h1>
+          <div className="flex items-center text-sm font-medium gap-2">
+            <Link to="/judge" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-500 font-semibold">Legal Research</span>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
         {/* Sidebar */}
         <div className="xl:col-span-1 space-y-6">
           {/* Search Controls */}
-          <Card className="bg-card border border-border shadow-sm rounded-xl">
+          <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Search className="w-5 h-5" />
@@ -621,7 +636,7 @@ export default function LegalResearchPage() {
           </Card>
 
           {/* Research Analytics */}
-          <Card className="bg-card border border-border shadow-sm rounded-xl">
+          <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <TrendingUp className="w-5 h-5" />
@@ -651,7 +666,7 @@ export default function LegalResearchPage() {
           </Card>
 
           {/* Quick Stats */}
-          <Card className="bg-card border border-border shadow-sm rounded-xl">
+          <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Star className="w-5 h-5" />
@@ -705,7 +720,7 @@ export default function LegalResearchPage() {
                       {currentResults.map((caseItem) => (
                         <Card
                           key={caseItem.id}
-                          className="bg-card border border-border shadow-sm rounded-xl hover:shadow-md transition-all cursor-pointer"
+                          className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-xl hover:shadow-lg transition-all cursor-pointer"
                           onClick={() => handleCaseClick(caseItem)}
                         >
                           <CardContent className="p-6">

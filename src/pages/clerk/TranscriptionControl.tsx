@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -17,6 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
   Mic,
   PlayCircle,
@@ -32,9 +34,14 @@ import {
   Volume2,
   VolumeX,
   Trash2,
-  Eye
+  Eye,
+  ChevronRight,
+  Upload,
+  Search,
+  Filter,
+  ChevronDown
 } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import {
   mockTranscriptionRecords,
   translations,
@@ -126,6 +133,9 @@ const TranscriptionControl = () => {
   const [caseNumber, setCaseNumber] = useState('');
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [clerkFilter, setClerkFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -282,7 +292,15 @@ const TranscriptionControl = () => {
   if (currentView === 'history') {
     const allRecords = [...savedTranscripts, ...mockTranscriptionRecords];
     const filteredRecords = allRecords
-      .filter(record => selectedLanguage === 'multiple' || record.language === selectedLanguage)
+      .filter(record => {
+        const matchesLanguage = selectedLanguage === 'multiple' || record.language === selectedLanguage;
+        const matchesSearch = record.caseNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          record.caseTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          record.clerkName.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesClerk = clerkFilter === 'all' || record.clerkName === clerkFilter;
+        const matchesStatus = statusFilter === 'all' || record.status === statusFilter;
+        return matchesLanguage && matchesSearch && matchesClerk && matchesStatus;
+      })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const totalPages = Math.ceil(filteredRecords.length / itemsPerPage);
@@ -307,41 +325,45 @@ const TranscriptionControl = () => {
     };
 
     return (
-      <div className="min-h-screen bg-background p-8 animate-fade-in">
-        {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-display font-bold text-foreground mb-1 tracking-tight">Transcription Control</h1>
-              <p className="text-sm text-muted-foreground">Manage live and recorded courtroom transcriptions</p>
+      <div className="min-h-screen bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Transcription Control</h1>
+            <div className="flex items-center text-sm font-medium gap-2">
+              <Link to="/clerk" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-slate-500 font-semibold">Transcription Control</span>
             </div>
-            <div className="flex items-center gap-3">
-              <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                <SelectTrigger className="w-[180px]">
-                  <Globe className="w-4 h-4 mr-2" />
+          </div>
+          <div className="flex items-center gap-3">
+            <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+              <SelectTrigger className="w-fit min-w-[220px] h-9 border-none bg-slate-200/80 hover:bg-slate-300 text-[#0047BB] font-bold px-4 shadow-none transition-colors whitespace-nowrap">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 shrink-0" />
                   <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="multiple">Multiple Languages</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="ar">العربية</SelectItem>
-                  <SelectItem value="hi">हिंदी</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button
-                onClick={() => setCurrentView('live')}
-                className="bg-primary hover:bg-primary/90"
-              >
-                <PlayCircle className="w-4 h-4 mr-2" />
-                Live Transcription
-              </Button>
-            </div>
+                </div>
+              </SelectTrigger>
+              <SelectContent className="border-slate-100">
+                <SelectItem value="multiple">Multiple Languages</SelectItem>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="ar">العربية</SelectItem>
+                <SelectItem value="hi">हिंदी</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              onClick={() => setCurrentView('live')}
+              className="bg-[#0047BB] hover:bg-[#003da1] h-9 shadow-md font-bold px-5 rounded-lg text-white transition-all"
+            >
+              <PlayCircle className="w-4 h-4 mr-2" />
+              Live Transcription
+            </Button>
           </div>
         </div>
 
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="court-card hover:-translate-y-0.5 transition-all duration-200">
+          <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-xl hover:-translate-y-0.5 transition-all duration-200">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-emerald-100 flex items-center justify-center">
@@ -355,7 +377,7 @@ const TranscriptionControl = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-card border border-border shadow-sm rounded-xl hover:-translate-y-0.5 transition-all duration-200">
+          <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-xl hover:-translate-y-0.5 transition-all duration-200">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -371,7 +393,7 @@ const TranscriptionControl = () => {
             </CardContent>
           </Card>
 
-          <Card className="court-card hover:-translate-y-0.5 transition-all duration-200">
+          <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-xl hover:-translate-y-0.5 transition-all duration-200">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
@@ -387,7 +409,7 @@ const TranscriptionControl = () => {
             </CardContent>
           </Card>
 
-          <Card className="court-card hover:-translate-y-0.5 transition-all duration-200">
+          <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-xl hover:-translate-y-0.5 transition-all duration-200">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
@@ -404,8 +426,49 @@ const TranscriptionControl = () => {
           </Card>
         </div>
 
+        {/* Search & Filter Bar (Outer) */}
+        <div className="flex gap-3 mb-6">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-[#0047BB] transition-colors" />
+            <Input
+              placeholder="Search transcriptions..."
+              className="pl-10 h-10 bg-white border-slate-200 focus:ring-[#0047BB]/10 transition-all text-sm rounded-lg shadow-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Select value={clerkFilter} onValueChange={setClerkFilter}>
+              <SelectTrigger className="w-48 h-10 bg-white border-slate-200 shadow-sm text-slate-600 font-medium">
+                <div className="flex items-center">
+                  <Filter className="w-4 h-4 mr-2 text-slate-500" />
+                  <SelectValue placeholder="All Clerks" />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="border-slate-100">
+                <SelectItem value="all">All Clerks</SelectItem>
+                {Array.from(new Set(allRecords.map(r => r.clerkName))).map(clerk => (
+                  <SelectItem key={clerk} value={clerk}>{clerk}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-40 h-10 bg-white border-slate-200 shadow-sm text-slate-600 font-medium">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent className="border-slate-100">
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="in-progress">In Progress</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         {/* Transcription Records Table */}
-        <Card className="bg-card border border-border shadow-sm rounded-xl">
+        <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-2xl overflow-hidden">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
@@ -417,62 +480,65 @@ const TranscriptionControl = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="rounded-xl border border-borders overflow-hidden shadow-sm">
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="hover:bg-transparent border-b border-border">
-                    <TableHead className="w-[50px] pl-4">
+                  <TableRow className="hover:bg-transparent bg-slate-50/30 border-b border-slate-100">
+                    <TableHead className="w-[50px] pl-6 py-4">
                       <Checkbox
                         checked={paginatedRecords.length > 0 && selectedRows.length === paginatedRecords.length}
                         onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
+                        className="border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                       />
                     </TableHead>
-                    <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Case Number</TableHead>
-                    <TableHead className="w-[19%] text-xs font-semibold text-muted-foreground">Case Title</TableHead>
-                    <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">Date</TableHead>
-                    <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">Duration</TableHead>
-                    <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Language</TableHead>
-                    <TableHead className="w-[13%] text-xs font-semibold text-muted-foreground">Clerk</TableHead>
-                    <TableHead className="w-[11%] text-xs font-semibold text-muted-foreground">File Size</TableHead>
-                    <TableHead className="w-[9%] text-center text-xs font-semibold text-muted-foreground">Actions</TableHead>
+                    <TableHead className="w-[13%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Case Number</TableHead>
+                    <TableHead className="w-[19%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Case Title</TableHead>
+                    <TableHead className="w-[11%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Date</TableHead>
+                    <TableHead className="w-[11%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Duration</TableHead>
+                    <TableHead className="w-[13%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Language</TableHead>
+                    <TableHead className="w-[13%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">Clerk</TableHead>
+                    <TableHead className="w-[11%] text-xs font-bold text-slate-500 uppercase tracking-tight py-4">File Size</TableHead>
+                    <TableHead className="w-[9%] text-center text-xs font-bold text-slate-500 uppercase tracking-tight py-4 whitespace-nowrap">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paginatedRecords.map((record) => (
-                    <TableRow key={record.id} className="hover:bg-accent/5 transition-colors border-b last:border-0 border-border">
-                      <TableCell className="pl-4">
+                    <TableRow key={record.id} className="group hover:bg-slate-50/50 border-b border-slate-50 transition-colors">
+                      <TableCell className="pl-6">
                         <Checkbox
                           checked={selectedRows.includes(record.id)}
                           onCheckedChange={(checked) => handleSelectRow(record.id, checked as boolean)}
+                          className="border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                         />
                       </TableCell>
-                      <TableCell className="font-medium text-[#0047BA] dark:text-blue-400">{record.caseNumber}</TableCell>
+                      <TableCell className="font-bold text-[#0047BA] dark:text-blue-400 py-4">{record.caseNumber}</TableCell>
                       <TableCell>
-                        <div className="max-w-xs truncate text-muted-foreground" title={record.caseTitle}>
+                        <div className="max-w-xs truncate text-slate-600 font-medium" title={record.caseTitle}>
                           {record.caseTitle}
                         </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
+                      <TableCell className="text-slate-600 font-medium whitespace-nowrap">
                         {new Date(record.date).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Clock className="w-4 h-4 text-muted-foreground" />
+                        <div className="flex items-center gap-2 text-slate-600 font-medium">
+                          <Clock className="w-4 h-4" />
                           {record.duration}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className={
+                        <Badge variant="outline" className={cn(
+                          "px-3 py-1 rounded-md text-[10px] border shadow-none uppercase tracking-wide",
                           record.language === 'en' ? 'bg-blue-50 text-blue-700 border-blue-200' :
                             record.language === 'hi' ? 'bg-orange-50 text-orange-700 border-orange-200' :
                               record.language === 'ar' ? 'bg-green-50 text-green-700 border-green-200' :
                                 'bg-gray-50 text-gray-700 border-gray-200'
-                        }>
+                        )}>
                           {record.language === 'en' ? 'English' : record.language === 'hi' ? 'हिंदी' : 'العربية'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">{record.clerkName}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
+                      <TableCell className="text-slate-600 font-medium whitespace-nowrap">{record.clerkName}</TableCell>
+                      <TableCell className="text-sm text-slate-500 font-medium">
                         {record.fileSize}
                       </TableCell>
                       <TableCell className="text-right">
@@ -520,64 +586,40 @@ const TranscriptionControl = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-4">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage(prev => Math.max(prev - 1, 1));
-                        }}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                      if (
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1)
-                      ) {
-                        return (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setCurrentPage(page);
-                              }}
-                              isActive={currentPage === page}
-                              className="cursor-pointer"
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
-                      } else if (
-                        (page === currentPage - 2 && page > 1) ||
-                        (page === currentPage + 2 && page < totalPages)
-                      ) {
-                        return (
-                          <PaginationItem key={page}>
-                            <span className="px-2">...</span>
-                          </PaginationItem>
-                        );
-                      }
-                      return null;
-                    })}
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                        }}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-                <p className="text-sm text-muted-foreground text-center mt-2">
-                  Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+              <div className="p-4 bg-white border-t border-slate-100 flex items-center justify-between">
+                <p className="text-xs font-semibold text-slate-500">
+                  Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length}
                 </p>
+                <div className="flex items-center gap-1.5">
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="h-8 w-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 border-none"
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronRight className="w-4 h-4 rotate-180" />
+                  </Button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "secondary"}
+                      className={`h-8 w-8 rounded-lg ${currentPage === page ? 'bg-primary text-white shadow-sm' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'} p-0 text-xs font-bold border-none`}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="h-8 w-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 border-none"
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             )}
 
@@ -591,112 +633,116 @@ const TranscriptionControl = () => {
   // Live View - Ready to Start
   if (currentView === 'live' && !isRecording) {
     return (
-      <div className="min-h-screen bg-background p-8 animate-fade-in">
-        {/* Hero Header */}
-        <div className="text-left mb-8">
-          <div className="absolute inset-0 justice-pattern -z-10 opacity-30" />
-          <h1 className="text-2xl font-display font-bold text-foreground mb-1 tracking-tight">
-            Live Transcription
-          </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Ready to start recording courtroom proceedings
-          </p>
-        </div>
-
-        <div className="flex-1 space-y-6">
-          {/* Back Button */}
-          <div className="flex items-center justify-end mb-8">
+      <div className="min-h-screen bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Live Transcription</h1>
+            <div className="flex items-center text-sm font-medium gap-2">
+              <Link to="/clerk" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <Link to="/clerk/transcription" className="text-primary hover:underline cursor-pointer" onClick={() => setCurrentView('history')}>Transcription Control</Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <span className="text-slate-500 font-semibold">Live Transcription</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
             <Button
               variant="outline"
+              className="h-10 border-slate-200 bg-white text-slate-600 font-medium px-4 shadow-sm"
               onClick={() => setCurrentView('history')}
             >
               Back to History
             </Button>
           </div>
-
-          {/* Start Transcription Card */}
-          <Card className="court-card border-2 border-dashed border-border hover:border-accent transition-colors">
-            <CardContent className="pt-12 pb-12">
-              <div className="text-center space-y-8">
-                <div className="w-24 h-24 rounded-full bg-slate-50 flex items-center justify-center mx-auto">
-                  <Mic className="w-12 h-12 text-slate-200" />
-                </div>
-
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold">Ready to Start Transcription</h2>
-                  <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
-                    Begin recording courtroom proceedings with AI-powered real-time transcription,
-                    speaker identification, and multilingual support.
-                  </p>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">Case Number:</label>
-                    <input
-                      type="text"
-                      value={caseNumber}
-                      onChange={(e) => setCaseNumber(e.target.value)}
-                      className="px-3 py-2 border border-border rounded-md bg-background text-sm w-32"
-                      placeholder="2025-CR-XXX"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">Language:</label>
-                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                      <SelectTrigger className="w-32">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="ar">العربية</SelectItem>
-                        <SelectItem value="hi">हिंदी</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={startTranscription}
-                  size="lg"
-                  className="h-12 px-8 text-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                  disabled={!caseNumber.trim() || !selectedLanguage}
-                >
-                  <PlayCircle className="w-5 h-5 mr-2" />
-                  Start Transcription
-                </Button>
-                {(!caseNumber.trim() || !selectedLanguage) && (
-                  <p className="text-sm text-red-600 dark:text-red-400 mt-2">
-                    Please enter Case Number and select Language to start transcription.
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
         </div>
+
+        {/* Start Transcription Card */}
+        <Card className="court-card border-2 border-dashed border-border hover:border-accent transition-colors">
+          <CardContent className="pt-12 pb-12">
+            <div className="text-center space-y-8">
+              <div className="w-24 h-24 rounded-full bg-slate-50 flex items-center justify-center mx-auto">
+                <Mic className="w-12 h-12 text-slate-200" />
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Ready to Start Transcription</h2>
+                <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
+                  Begin recording courtroom proceedings with AI-powered real-time transcription,
+                  speaker identification, and multilingual support.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Case Number:</label>
+                  <input
+                    type="text"
+                    value={caseNumber}
+                    onChange={(e) => setCaseNumber(e.target.value)}
+                    className="px-3 py-2 border border-border rounded-md bg-background text-sm w-32"
+                    placeholder="2025-CR-XXX"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Language:</label>
+                  <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="ar">العربية</SelectItem>
+                      <SelectItem value="hi">हिंदी</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <Button
+                onClick={startTranscription}
+                size="lg"
+                className="h-12 px-8 text-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                disabled={!caseNumber.trim() || !selectedLanguage}
+              >
+                <PlayCircle className="w-5 h-5 mr-2" />
+                Start Transcription
+              </Button>
+              {(!caseNumber.trim() || !selectedLanguage) && (
+                <p className="text-sm text-red-600 dark:text-red-400 mt-2">
+                  Please enter Case Number and select Language to start transcription.
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-8 animate-fade-in">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="text-left">
-          <h1 className="text-2xl font-bold text-foreground mb-1">
+    <div className="min-h-screen bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-3">
             Live Transcription
+            <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none px-3 py-1 flex items-center">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse" />
+              Live
+            </Badge>
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Case {caseNumber} • Recording {currentTime}
-          </p>
+          <div className="flex items-center text-sm font-medium gap-2">
+            <Link to="/clerk" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <Link to="/clerk/transcription" className="text-primary hover:underline cursor-pointer" onClick={() => setCurrentView('history')}>Transcription Control</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-500 font-semibold">Recording: {caseNumber}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-none px-3 py-1">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse" />
-            Live
-          </Badge>
-          <Button variant="outline" size="sm" onClick={() => setIsMuted(!isMuted)}>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="icon" className="h-10 w-10 border-slate-200 bg-white shadow-sm text-slate-500" onClick={() => setIsMuted(!isMuted)}>
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
         </div>
@@ -706,7 +752,7 @@ const TranscriptionControl = () => {
 
         {/* Live Transcript Panel */}
         <div className="lg:col-span-2 space-y-4">
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="bg-white border-none shadow-md shadow-slate-200/50 rounded-2xl">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-lg">

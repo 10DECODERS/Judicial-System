@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
@@ -16,25 +15,20 @@ import {
   Bookmark,
   BookmarkCheck,
   Clock,
-  Calendar,
   User,
   FileText,
-  AlertCircle,
-  CheckCircle,
   Globe,
   StickyNote,
-  Eye,
   Share,
   Activity,
-  Scale
+  Scale,
+  Gavel
 } from 'lucide-react';
 import {
   mockTranscriptionRecords,
   getLanguageDisplayName,
   speakerColors as importedSpeakerColors,
-  legalKeywords as importedLegalKeywords,
-  highlightLegalKeywords,
-  translations,
+  legalKeywords,
   getTranslation
 } from '@/lib/transcriptionUtils';
 
@@ -58,18 +52,6 @@ interface CaseMetadata {
   language: string;
   status: 'completed' | 'processing' | 'failed';
 }
-
-// Mock data for demonstration
-const mockCaseMetadata: CaseMetadata = {
-  caseNumber: '2025-CR-023',
-  caseTitle: 'State vs. Johnson - Detailed Review',
-  hearingDate: '2025-01-15',
-  judgeName: 'Hon. Martinez',
-  clerkName: 'Sarah Williams',
-  duration: '02:15:30',
-  language: 'English',
-  status: 'completed'
-};
 
 const getMockTranscriptEntries = (language: string = 'en'): TranscriptEntry[] => {
   const baseEntries = [
@@ -189,8 +171,6 @@ const speakerColors = {
   Witness: 'bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-950 dark:text-orange-200 dark:border-orange-800'
 };
 
-const legalKeywords = ['objection', 'sustained', 'witness', 'adjourned', 'evidence', 'testimony', 'discovery', 'admissible', 'authentication', 'foundation'];
-
 const TranscriptDetailView = () => {
   const { recordId } = useParams();
   const navigate = useNavigate();
@@ -200,13 +180,9 @@ const TranscriptDetailView = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [record, setRecord] = useState<any>(null);
   const [privateNotes, setPrivateNotes] = useState('');
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [caseMetadata, setCaseMetadata] = useState<CaseMetadata | null>(null);
 
   useEffect(() => {
-    console.log('🚀 Initializing transcript detail view for record:', recordId);
-    console.log('📍 Navigation state:', location.state);
-
     // Load data from localStorage and mock data
     const savedRecords = localStorage.getItem('transcriptionRecords');
     let allRecords = [...mockTranscriptionRecords];
@@ -218,13 +194,10 @@ const TranscriptDetailView = () => {
     // Find the record by ID
     const record = allRecords.find(r => r.id === recordId);
     if (record) {
-      console.log('📄 Found record:', record.caseNumber, 'Language:', record.language);
-
       setRecord(record);
 
       // Get default language from navigation state or use record's language
       const defaultLanguage = (location.state as any)?.defaultLanguage || record.language || 'en';
-      console.log('🌐 Default language:', defaultLanguage);
 
       setCaseMetadata({
         caseNumber: record.caseNumber,
@@ -237,30 +210,19 @@ const TranscriptDetailView = () => {
         status: record.status as any
       });
 
-      // Set the selected language AFTER setting the record to ensure translation works
-      console.log('⚙️ Setting selected language to:', defaultLanguage);
       setSelectedLanguage(defaultLanguage);
-    } else {
-      console.log('❌ Record not found for ID:', recordId);
     }
   }, [recordId, location.state]);
 
   useEffect(() => {
     if (record) {
-      console.log('🔄 Updating transcript for language:', selectedLanguage);
-      console.log('📄 Record language:', record.language);
-      console.log('📄 Record entries available:', record.entries?.length || 0);
-
       // If record has entries, use them; otherwise use mock entries as base
       let baseEntries = record.entries?.length > 0
         ? record.entries
-        : getMockTranscriptEntries('en'); // Base entries are always in English
-
-      console.log('📄 Using', baseEntries.length, 'base entries');
+        : getMockTranscriptEntries('en');
 
       // Apply language translation for display
-      const translatedEntries = baseEntries.map(entry => {
-        // Get the English base text (use originalText if available, otherwise assume entry.text is base English)
+      const translatedEntries = baseEntries.map((entry: any) => {
         const englishBaseText = entry.originalText || entry.text;
         const displayText = selectedLanguage === 'en' ? englishBaseText : getTranslation(englishBaseText, selectedLanguage) || englishBaseText;
 
@@ -273,7 +235,6 @@ const TranscriptDetailView = () => {
         };
       });
 
-      console.log('✅ Setting transcript with', translatedEntries.length, 'translated entries');
       setTranscript(translatedEntries);
     }
   }, [record, selectedLanguage]);
@@ -290,26 +251,20 @@ const TranscriptDetailView = () => {
         ? { ...entry, isBookmarked: !entry.isBookmarked }
         : entry
     ));
-
-    setBookmarks(prev =>
-      prev.includes(entryId)
-        ? prev.filter(id => id !== entryId)
-        : [...prev, entryId]
-    );
   };
 
   const highlightLegalKeywords = (text: string) => {
     let highlightedText = text;
+    // @ts-ignore
     legalKeywords.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
-      highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-800 px-1 rounded text-yellow-900 dark:text-yellow-100">${keyword}</mark>`);
+      highlightedText = highlightedText.replace(regex, `<mark class="bg-yellow-200 dark:bg-yellow-900/40 px-1 rounded text-yellow-900 dark:text-yellow-100 font-medium">${keyword}</mark>`);
     });
     return highlightedText;
   };
 
   const handleDownload = (format: 'pdf' | 'txt') => {
     console.log(`Downloading transcript as ${format}`);
-    // Here you would implement the actual download functionality
   };
 
   const handlePrint = () => {
@@ -317,284 +272,257 @@ const TranscriptDetailView = () => {
   };
 
   const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Transcript - ${caseMetadata.caseTitle}`,
-        text: `Court transcript for ${caseMetadata.caseNumber}`,
-        url: window.location.href
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-    }
+    // Share logic
   };
 
   return (
-    <div className="min-h-screen bg-background animate-fade-in">
-      {/* Top Navigation Bar with Breadcrumbs */}
-      <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="flex items-center justify-between px-6 py-3">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/judge/transcripts')}
-            className="text-muted-foreground hover:text-foreground gap-2 pl-0 hover:bg-transparent"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Back to Transcripts</span>
+    <div className="min-h-screen bg-[#F9F9FC] dark:bg-background px-8 py-2 animate-fade-in font-sans">
+      {/* Top Navigation */}
+      <div className="flex items-center justify-between mb-5">
+        <Button variant="ghost" className="text-muted-foreground hover:text-primary pl-0" onClick={() => navigate('/judge/transcripts')}>
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Transcripts
+        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100 shadow-sm transition-colors" onClick={handleShare}>
+            <Share className="w-4 h-4 mr-2" />
+            Share
           </Button>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleShare} className="gap-2 h-8 text-xs">
-              <Share className="w-3.5 h-3.5" />
-              Share
-            </Button>
-            <Button variant="outline" size="sm" onClick={handlePrint} className="gap-2 h-8 text-xs">
-              <Printer className="w-3.5 h-3.5" />
-              Print
-            </Button>
-            <Button variant="default" size="sm" onClick={() => handleDownload('pdf')} className="gap-2 h-8 text-xs bg-primary hover:bg-primary/90">
-              <Download className="w-3.5 h-3.5" />
-              Export PDF
-            </Button>
-          </div>
+          <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100 shadow-sm transition-colors" onClick={handlePrint}>
+            <Printer className="w-4 h-4 mr-2" />
+            Print
+          </Button>
+          <Button size="sm" className="bg-[#0047BB] hover:bg-[#003da0] text-white shadow-sm transition-colors" onClick={() => handleDownload('pdf')}>
+            <Download className="w-4 h-4 mr-2" />
+            Export PDF
+          </Button>
         </div>
       </div>
 
-      {/* Hero Header Section */}
-      <div className="bg-gradient-to-b from-card to-background px-8 pt-8 pb-6 border-b border-border/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-start justify-between gap-6 mb-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start mb-5 gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-3">
+            <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md px-2 py-0.5 text-xs font-semibold">
+              {caseMetadata?.status === 'completed' ? 'Transcription Complete' : caseMetadata?.status || 'Processing'}
+            </Badge>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+              <span className="text-xs text-muted-foreground font-medium">Verified by AI</span>
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2 tracking-tight">
+            {caseMetadata?.caseTitle || 'Transcript Review'}
+          </h1>
+          <p className="text-sm text-gray-500">
+            Official court record of proceedings held on {caseMetadata ? new Date(caseMetadata.hearingDate).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown Date'}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+            <SelectTrigger className="w-40 bg-white border-gray-200">
+              <Globe className="w-4 h-4 mr-2 text-gray-500" />
+              <SelectValue placeholder="Select Language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="ar">العربية</SelectItem>
+              <SelectItem value="hi">हिंदी</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+              <User className="w-5 h-5 text-blue-600" />
+            </div>
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 px-3 py-1 text-xs">
-                  {caseMetadata?.status === 'completed' ? 'Transcription Complete' : caseMetadata?.status || 'Processing'}
-                </Badge>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
-                  Case #{caseMetadata?.caseNumber || 'Unknown'}
-                </span>
-              </div>
-              <h1 className="text-2xl font-display font-bold text-foreground tracking-tight mb-2">
-                {caseMetadata?.caseTitle || 'Transcript Review'}
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                Official court record of proceedings held on {caseMetadata ? new Date(caseMetadata.hearingDate).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown Date'}
-              </p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">PRESIDING JUDGE</p>
+              <p className="text-sm font-semibold text-gray-900">{caseMetadata?.judgeName || 'Hon. Judge'}</p>
             </div>
+          </CardContent>
+        </Card>
 
-            {/* Language Selector in Header */}
-            <div className="bg-card border border-border rounded-lg p-1 flex items-center shadow-sm">
-              <Globe className="w-4 h-4 text-muted-foreground ml-3 mr-2" />
-              <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                <SelectTrigger className="w-[140px] border-0 shadow-none focus:ring-0 h-8 text-sm bg-transparent">
-                  <SelectValue placeholder="Language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English (Original)</SelectItem>
-                  <SelectItem value="hi">Hindi (Translated)</SelectItem>
-                  <SelectItem value="ar">Arabic (Translated)</SelectItem>
-                </SelectContent>
-              </Select>
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-green-600" />
             </div>
-          </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">DURATION</p>
+              <p className="text-sm font-semibold text-gray-900">{caseMetadata?.duration || '00:00:00'}</p>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Metadata Grid */}
-          <div className="grid grid-cols-4 gap-4 mt-6">
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border/60 shadow-sm">
-              <div className="p-2.5 rounded-md bg-blue-50 dark:bg-blue-950/30 text-primary">
-                <User className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Presiding Judge</p>
-                <p className="text-sm font-semibold text-foreground">{caseMetadata?.judgeName || 'Hon. Judge'}</p>
-              </div>
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-purple-600" />
             </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">RECORD TYPE</p>
+              <p className="text-sm font-semibold text-gray-900">Official Transcript</p>
+            </div>
+          </CardContent>
+        </Card>
 
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border/60 shadow-sm">
-              <div className="p-2.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Duration</p>
-                <p className="text-sm font-semibold text-foreground">{caseMetadata?.duration || '00:00:00'}</p>
-              </div>
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
+              <Activity className="w-5 h-5 text-orange-600" />
             </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border/60 shadow-sm">
-              <div className="p-2.5 rounded-md bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400">
-                <FileText className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Record Type</p>
-                <p className="text-sm font-semibold text-foreground">Official Transcript</p>
-              </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">CONFIDENCE SCORE</p>
+              <p className="text-sm font-semibold text-gray-900">98.5% Accuracy</p>
             </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-border/60 shadow-sm">
-              <div className="p-2.5 rounded-md bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400">
-                <Activity className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Confidence Score</p>
-                <p className="text-sm font-semibold text-foreground">98.5% Accuracy</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Main Content Area */}
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="grid grid-cols-12 gap-8">
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Left Column: Transcript Paper */}
-          <div className="col-span-12 lg:col-span-8">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <h2 className="text-lg font-semibold text-foreground">Transcript Record</h2>
-                <Badge variant="secondary" className="text-xs font-normal text-muted-foreground bg-muted/50 border-0">
-                  {filteredTranscript.length} lines
-                </Badge>
-              </div>
+        {/* Left Column: Transcript */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-4">
+              <h2 className="text-lg font-bold text-gray-900">Transcript Record</h2>
+              <Badge variant="outline" className="text-gray-500 border-gray-200 font-normal">
+                {filteredTranscript.length} lines
+              </Badge>
+            </div>
+            <div className="relative w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search in transcript..."
+                className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
 
-              <div className="relative w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search in transcript..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 h-9 bg-background border-border"
-                />
-              </div>
+          <div className="bg-white rounded-xl shadow-md shadow-slate-200/50 border border-gray-100 h-[600px] relative overflow-hidden flex flex-col">
+            {/* Watermark / Header */}
+            <div className="border-b border-gray-100 bg-gray-50/50 p-4 flex justify-between items-center text-[10px] text-gray-400 font-mono tracking-widest uppercase shrink-0">
+              <span>Official Court Record • {caseMetadata?.caseNumber}</span>
+              <span>Page 1 of 1</span>
             </div>
 
-            {/* The Paper Component */}
-            <div className="bg-white dark:bg-neutral-900 border border-border/40 shadow-xl shadow-slate-200/40 dark:shadow-black/20 rounded-xl overflow-hidden min-h-[800px]">
-              {/* Paper Header/Watermark effect */}
-              <div className="h-16 border-b border-dashed border-gray-200 dark:border-gray-800 flex items-center justify-between px-8 bg-gray-50/30 dark:bg-gray-900/30">
-                <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">Official Court Record • {caseMetadata?.caseNumber}</span>
-                <span className="text-xs font-mono text-gray-400">Page 1 of 1</span>
-              </div>
-
-              <div className="p-8 md:p-12 space-y-6">
-                {filteredTranscript.map((entry) => (
-                  <div key={entry.id} className="group relative pl-4 border-l-2 border-transparent hover:border-primary/20 transition-colors">
-                    {/* Speaker Label */}
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded ${entry.speaker === 'Judge' ? 'bg-blue-50 text-primary dark:bg-blue-900/30 dark:text-blue-300' :
-                        entry.speaker === 'Clerk' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' :
-                          entry.speaker === 'Lawyer' ? 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' :
-                            'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
-                        }`}>
+            <ScrollArea className="flex-1 px-8 py-2">
+              <div className="space-y-8 pb-12">
+                {filteredTranscript.map((entry, index) => (
+                  <div key={index} className="group border-b border-slate-100 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge className={`${speakerColors[entry.speaker]} px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border-none`}>
                         {entry.speaker}
-                      </span>
-                      <span className="text-xs font-mono text-muted-foreground/60">{entry.timestamp}</span>
-
-                      {/* Action Buttons (visible on hover) */}
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 ml-auto">
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleBookmark(entry.id)}>
+                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => toggleBookmark(entry.id)}>
                           {entry.isBookmarked ? <BookmarkCheck className="w-3.5 h-3.5 text-primary" /> : <Bookmark className="w-3.5 h-3.5 text-muted-foreground" />}
                         </Button>
+                        <span className="text-[10px] font-mono text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {entry.timestamp}
+                        </span>
                       </div>
                     </div>
-
-                    {/* Text Content */}
-                    <p className="text-base text-foreground/90 leading-relaxed pl-1"
+                    <p
+                      className="text-[15px] leading-relaxed text-gray-700 font-medium"
                       dangerouslySetInnerHTML={{ __html: highlightLegalKeywords(entry.text) }}
                     />
                   </div>
                 ))}
-
-                {filteredTranscript.length === 0 && (
-                  <div className="text-center py-20 text-muted-foreground">
-                    <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                    <p>No matches found in transcript</p>
-                  </div>
-                )}
               </div>
-            </div>
+            </ScrollArea>
           </div>
+        </div>
 
-          {/* Right Column: Tools Sidebar */}
-          <div className="col-span-12 lg:col-span-4 space-y-6">
+        {/* Right Column: Sidebar */}
+        <div className="space-y-6">
 
-            {/* Quick Actions Card */}
-            <Card className="bg-card border border-border shadow-sm rounded-xl">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-                  <Bookmark className="w-4 h-4 text-primary" />
-                  Bookmarked Moments
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* Bookmarked Moments */}
+          <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+            <CardContent className="p-0">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+                <Bookmark className="w-4 h-4 text-blue-600" />
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Bookmarked Moments</h3>
+              </div>
+              <div className="p-4 space-y-4">
                 <ScrollArea className="h-[240px] pr-4">
                   <div className="space-y-3">
                     {transcript.filter(e => e.isBookmarked).map(entry => (
-                      <div key={entry.id}
-                        className="p-3 bg-muted/30 rounded-lg border border-border/50 hover:bg-muted/50 transition-colors cursor-pointer group"
-                        onClick={() => {
-                          // Handle jump to timestamp
-                        }}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-bold uppercase text-primary bg-primary/5 px-1.5 py-0.5 rounded">{entry.speaker}</span>
-                          <span className="text-xs font-mono text-muted-foreground">{entry.timestamp}</span>
+                      <div key={entry.id} className="bg-gray-50 rounded-lg p-3 hover:bg-blue-50 transition-colors cursor-pointer group border border-transparent hover:border-blue-100">
+                        <div className="flex justify-between items-center mb-1.5">
+                          <Badge className={`${speakerColors[entry.speaker as keyof typeof speakerColors]} text-[10px] px-1.5 py-0 h-5 border-none font-bold`}>
+                            {entry.speaker}
+                          </Badge>
+                          <span className="text-[10px] font-mono text-gray-400">{entry.timestamp}</span>
                         </div>
-                        <p className="text-xs text-foreground/80 line-clamp-2 leading-relaxed">"{entry.text}"</p>
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                          "{entry.text}"
+                        </p>
                       </div>
                     ))}
                     {transcript.filter(e => e.isBookmarked).length === 0 && (
-                      <div className="text-center py-8 px-4 border-2 border-dashed border-border/60 rounded-lg">
-                        <p className="text-xs text-muted-foreground">No bookmarks yet. Click the bookmark icon next to any transcript line to save it here.</p>
+                      <div className="text-center py-8 px-4 border-2 border-dashed border-gray-100 rounded-lg">
+                        <p className="text-xs text-muted-foreground">No bookmarks yet. Click the bookmark icon next to any transcript line.</p>
                       </div>
                     )}
                   </div>
                 </ScrollArea>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Legal Analysis Card */}
-            <Card className="bg-card border border-border shadow-sm rounded-xl">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-violet-600" />
-                  Legal Keywords
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* Legal Keywords */}
+          <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+            <CardContent className="p-0">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+                <Gavel className="w-4 h-4 text-purple-600" />
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Legal Keywords</h3>
+              </div>
+              <div className="p-4">
                 <div className="flex flex-wrap gap-2">
-                  {legalKeywords.map(keyword => (
-                    <Badge key={keyword} variant="secondary" className="bg-violet-50 text-violet-700 hover:bg-violet-100 border-violet-100 dark:bg-violet-900/20 dark:text-violet-300 dark:border-violet-800/30">
-                      {keyword}
-                    </Badge>
+                  {legalKeywords.map((word) => (
+                    <span key={word} className="px-2.5 py-1 rounded-md bg-purple-50 text-purple-700 text-xs font-medium hover:bg-purple-100 cursor-pointer transition-colors">
+                      {word}
+                    </span>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Judge's Private Notes */}
-            <Card className="bg-card border border-border shadow-sm rounded-xl">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-                  <StickyNote className="w-4 h-4 text-amber-600" />
-                  Private Notes
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+          {/* Judge's Private Notes */}
+          <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
+            <CardContent className="p-0">
+              <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+                <StickyNote className="w-4 h-4 text-amber-600" />
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest">Private Notes</h3>
+              </div>
+              <div className="p-4">
                 <Textarea
                   placeholder="Record your private observations here..."
-                  className="min-h-[150px] resize-none bg-amber-50/30 border-amber-200/30 focus-visible:ring-amber-500/20 text-sm"
+                  className="min-h-[150px] resize-none bg-amber-50/30 border-amber-200/30 focus-visible:ring-amber-500/20 text-sm mb-3"
                   value={privateNotes}
                   onChange={(e) => setPrivateNotes(e.target.value)}
                 />
-                <div className="flex justify-end mt-3">
+                <div className="flex justify-end">
                   <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm">
                     Save Note
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-          </div>
         </div>
       </div>
     </div>

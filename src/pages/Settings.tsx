@@ -5,10 +5,10 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  User, 
-  Shield, 
-  Palette, 
+import {
+  User,
+  Shield,
+  Palette,
   Bell,
   Save,
   Settings as SettingsIcon
@@ -22,11 +22,11 @@ const Settings = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start gap-4 mb-6">
-          <div className="p-3 bg-accent/10 rounded-lg">
+          <div className="p-3 bg-accent/10 rounded-lg hidden">
             <SettingsIcon className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <h1 className="text-3xl font-display font-semibold text-headings mb-1">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight mb-1">
               Settings
             </h1>
             <p className="text-sm text-body">

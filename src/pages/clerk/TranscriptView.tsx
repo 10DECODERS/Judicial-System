@@ -94,23 +94,23 @@ const TranscriptView = () => {
   const handlePrint = () => window.print();
 
   return (
-    <div className="min-h-screen bg-[#F9F9FC] dark:bg-background p-6 animate-fade-in font-sans">
+    <div className="min-h-screen bg-[#F9F9FC] dark:bg-background px-8 py-2 animate-fade-in font-sans">
       {/* Top Navigation */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-5">
         <Button variant="ghost" className="text-muted-foreground hover:text-primary pl-0" onClick={() => navigate('/clerk/transcription')}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Transcripts
         </Button>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="bg-white">
+          <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100 shadow-sm transition-colors">
             <Share className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="bg-white" onClick={handlePrint}>
+          <Button variant="outline" size="sm" className="bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100 shadow-sm transition-colors" onClick={handlePrint}>
             <Printer className="w-4 h-4 mr-2" />
             Print
           </Button>
-          <Button size="sm" className="bg-[#0047BA] hover:bg-[#003da0] text-white shadow-sm">
+          <Button size="sm" className="bg-[#0047BB] hover:bg-[#003da0] text-white shadow-sm transition-colors">
             <Download className="w-4 h-4 mr-2" />
             Export PDF
           </Button>
@@ -118,7 +118,7 @@ const TranscriptView = () => {
       </div>
 
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start mb-5 gap-4">
         <div>
           <div className="flex items-center gap-3 mb-3">
             <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md px-2 py-0.5 text-xs font-semibold">
@@ -152,8 +152,8 @@ const TranscriptView = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <Card className="border-none shadow-sm bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
               <User className="w-5 h-5 text-blue-600" />
@@ -165,7 +165,7 @@ const TranscriptView = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm bg-white">
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
               <Clock className="w-5 h-5 text-green-600" />
@@ -177,7 +177,7 @@ const TranscriptView = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm bg-white">
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
               <FileText className="w-5 h-5 text-purple-600" />
@@ -189,7 +189,7 @@ const TranscriptView = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm bg-white">
+        <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
               <Activity className="w-5 h-5 text-orange-600" />
@@ -226,17 +226,17 @@ const TranscriptView = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[800px] relative overflow-hidden">
+          <div className="bg-white rounded-xl shadow-md shadow-slate-200/50 border border-gray-100 h-[600px] relative overflow-hidden flex flex-col">
             {/* Watermark / Header */}
-            <div className="border-b border-gray-100 bg-gray-50/50 p-4 flex justify-between items-center text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-6">
+            <div className="border-b border-gray-100 bg-gray-50/50 p-4 flex justify-between items-center text-[10px] text-gray-400 font-mono tracking-widest uppercase shrink-0">
               <span>Official Court Record • {caseMetadata?.caseNumber}</span>
               <span>Page 1 of 1</span>
             </div>
 
-            <ScrollArea className="h-[750px] px-8 py-2">
+            <ScrollArea className="flex-1 px-8 py-2">
               <div className="space-y-8 pb-12">
                 {filteredTranscript.map((entry, index) => (
-                  <div key={index} className="group">
+                  <div key={index} className="group border-b border-slate-100 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0">
                     <div className="flex items-center justify-between mb-2">
                       <Badge className={`${speakerColors[entry.speaker]} px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border-none`}>
                         {entry.speaker}
@@ -260,7 +260,7 @@ const TranscriptView = () => {
         <div className="space-y-6">
 
           {/* Bookmarked Moments */}
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
             <CardContent className="p-0">
               <div className="p-4 border-b border-gray-100 flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-blue-600" />
@@ -288,7 +288,7 @@ const TranscriptView = () => {
           </Card>
 
           {/* Legal Keywords */}
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="border-none shadow-md shadow-slate-200/50 bg-white">
             <CardContent className="p-0">
               <div className="p-4 border-b border-gray-100 flex items-center gap-2">
                 <Gavel className="w-4 h-4 text-purple-600" />

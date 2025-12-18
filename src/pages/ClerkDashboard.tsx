@@ -8,6 +8,9 @@ import { Mic, FileText, Clock, CheckCircle, Users, Calendar, AlertTriangle, Tren
 import TranscriptionControl from './clerk/TranscriptionControl';
 import TranscriptionRecords from './clerk/TranscriptionRecords';
 import TranscriptView from './clerk/TranscriptView';
+import UserManagement from './admin/UserManagement';
+import UserRoles from './admin/UserRoles';
+import AuditLog from './admin/AuditLog';
 import { mockTranscriptionRecords } from '@/lib/transcriptionUtils';
 
 const ClerkDashboard = () => {
@@ -18,6 +21,9 @@ const ClerkDashboard = () => {
         <Route path="/transcription" element={<TranscriptionControl />} />
         <Route path="/transcription-records" element={<TranscriptionRecords />} />
         <Route path="/transcript-view/:recordId" element={<TranscriptView />} />
+        <Route path="/users" element={<UserManagement />} />
+        <Route path="/roles" element={<UserRoles />} />
+        <Route path="/audit-log" element={<AuditLog />} />
         <Route path="/*" element={<div className="p-8 text-center text-muted-foreground">Module coming soon</div>} />
       </Routes>
       <AIAssistant />
@@ -39,65 +45,67 @@ const ClerkDashboardHome = () => {
             </h1>
             <p className="text-sm text-muted-foreground">Court transcription management and record keeping system.</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Badge variant="outline" className="px-4 py-2 text-sm">
-              <Calendar className="w-4 h-4 mr-2" />
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </Badge>
-          </div>
         </div>
       </div>
 
       {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-5 flex flex-col gap-2">
-            <div className="w-12 h-12 rounded-full bg-cyan-50 dark:bg-cyan-900/20 flex items-center justify-center">
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 hover:shadow-lg transition-all duration-300">
+          <CardContent className="p-6 flex flex-col gap-3">
+            <div className="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/20 flex items-center justify-center">
               <Headphones className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <p className="text-xs text-muted-foreground">Active Sessions</p>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-foreground">3</span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300">Live</span>
+            <div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Active Sessions</p>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-slate-900">3</span>
+                <Badge variant="secondary" className="bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border-none">Live</Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-5 flex flex-col gap-2">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 hover:shadow-lg transition-all duration-300">
+          <CardContent className="p-6 flex flex-col gap-3">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
               <FileCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <p className="text-xs text-muted-foreground">Completed Today</p>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-foreground">12</span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Transcripts</span>
+            <div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Completed Today</p>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-slate-900">12</span>
+                <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-none">Transcripts</Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-5 flex flex-col gap-2">
-            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 hover:shadow-lg transition-all duration-300">
+          <CardContent className="p-6 flex flex-col gap-3">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
               <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
-            <p className="text-xs text-muted-foreground">Pending Review</p>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-foreground">5</span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">Queued</span>
+            <div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Pending Review</p>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-slate-900">5</span>
+                <Badge variant="secondary" className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-none">Queued</Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-none shadow-sm hover:shadow-md transition-all duration-300">
-          <CardContent className="p-5 flex flex-col gap-2">
-            <div className="w-12 h-12 rounded-full bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center">
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 hover:shadow-lg transition-all duration-300">
+          <CardContent className="p-6 flex flex-col gap-3">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center">
               <TrendingUp className="w-6 h-6 text-rose-600 dark:text-rose-400" />
             </div>
-            <p className="text-xs text-muted-foreground">Success Rate</p>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-foreground">96%</span>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">Target 95%</span>
+            <div>
+              <p className="text-sm font-medium text-slate-500 mb-1">Success Rate</p>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-slate-900">96%</span>
+                <Badge variant="secondary" className="bg-rose-50 text-rose-700 hover:bg-rose-100 border-none">Target 95%</Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -105,61 +113,69 @@ const ClerkDashboardHome = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Quick Access Modules */}
-        <div>
-          <Card className="bg-card border-none shadow-sm card-hover cursor-pointer group hover:shadow-lg transition-all duration-300 h-full" onClick={() => navigate('/clerk/transcription', { state: { view: 'live' } })}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl font-semibold flex items-center gap-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                <Mic className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+        <div className="h-full">
+          <Card
+            className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 h-full cursor-pointer group"
+            onClick={() => navigate('/clerk/transcription', { state: { view: 'live' } })}
+          >
+            <CardHeader className="pb-4 bg-white border-b border-slate-50">
+              <CardTitle className="text-xl font-bold flex items-center gap-3 text-slate-800 group-hover:text-[#0047BB] transition-colors">
+                <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 transition-colors">
+                  <Mic className="w-5 h-5 text-slate-500 group-hover:text-[#0047BB] transition-colors" />
+                </div>
                 Transcription Control
               </CardTitle>
-              <CardDescription className="text-base ml-7">Manage courtroom transcription</CardDescription>
+              <CardDescription className="text-base ml-[52px]">Manage courtroom transcription</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 bg-teal-50 dark:bg-teal-950/50 rounded-lg border border-teal-200 dark:border-teal-800">
-                  <Mic className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                  <div className="flex-1">
-                    <p className="text-base font-medium">Start New Transcription</p>
-                    <p className="text-sm text-muted-foreground">Begin recording courtroom proceedings</p>
+                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 group-hover:border-blue-100 group-hover:bg-blue-50/30 transition-all">
+                  <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <Mic className="w-5 h-5 text-[#0047BB]" />
                   </div>
-                  <Badge className="bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200">Ready</Badge>
+                  <div className="flex-1">
+                    <p className="text-base font-bold text-slate-900">Start New Transcription</p>
+                    <p className="text-sm text-slate-500">Begin recording courtroom proceedings</p>
+                  </div>
+                  <Badge className="bg-[#0047BB] hover:bg-[#003da1] text-white">Ready</Badge>
                 </div>
-
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Active Sessions */}
-        <div>
-          <Card className="bg-card h-full">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+        <div className="h-full">
+          <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-2xl overflow-hidden h-full">
+            <CardHeader className="pb-4 bg-white border-b border-slate-50">
+              <CardTitle className="text-xl font-bold flex items-center gap-3 text-slate-800">
+                <div className="p-2 bg-slate-50 rounded-lg">
+                  <Clock className="w-5 h-5 text-slate-500" />
+                </div>
                 Active Sessions
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-200/50">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full mt-2 animate-pulse"></div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-4 p-4 bg-emerald-50/50 rounded-xl border border-emerald-100 hover:border-emerald-200 transition-colors">
+                  <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full mt-2 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
                   <div className="flex-1">
-                    <p className="font-medium text-sm">Courtroom 3A - Criminal Trial</p>
-                    <p className="text-xs text-muted-foreground">Case #2025-CR-023 • Started 2h 15m ago</p>
+                    <p className="font-bold text-sm text-slate-900">Courtroom 3A - Criminal Trial</p>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Case #2025-CR-023 • Started 2h 15m ago</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-cyan-50 dark:bg-cyan-950/50 rounded-lg border border-cyan-200/50">
-                  <div className="w-3 h-3 bg-cyan-500 rounded-full mt-2 animate-pulse"></div>
+                <div className="flex items-start gap-4 p-4 bg-cyan-50/50 rounded-xl border border-cyan-100 hover:border-cyan-200 transition-colors">
+                  <div className="w-2.5 h-2.5 bg-cyan-500 rounded-full mt-2 animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.5)]"></div>
                   <div className="flex-1">
-                    <p className="font-medium text-sm">Courtroom 2B - Civil Hearing</p>
-                    <p className="text-xs text-muted-foreground">Case #2025-CV-045 • Started 45m ago</p>
+                    <p className="font-bold text-sm text-slate-900">Courtroom 2B - Civil Hearing</p>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Case #2025-CV-045 • Started 45m ago</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-950/50 rounded-lg border border-slate-200/50">
-                  <Clock className="w-5 h-5 text-slate-600 dark:text-slate-400 mt-0.5" />
+                <div className="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200/60">
+                  <Clock className="w-4 h-4 text-slate-400 mt-0.5" />
                   <div className="flex-1">
-                    <p className="font-medium text-sm">Courtroom 1A - Standby</p>
-                    <p className="text-xs text-muted-foreground">Next case scheduled for 2:00 PM</p>
+                    <p className="font-bold text-sm text-slate-700">Courtroom 1A - Standby</p>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Next case scheduled for 2:00 PM</p>
                   </div>
                 </div>
               </div>
@@ -170,64 +186,71 @@ const ClerkDashboardHome = () => {
 
       {/* Recent Records & Courtroom Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl">
-              <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-2xl overflow-hidden">
+          <CardHeader className="pb-4 bg-white border-b border-slate-50">
+            <CardTitle className="flex items-center gap-3 text-xl font-bold text-slate-800">
+              <div className="p-2 bg-slate-50 rounded-lg">
+                <FileText className="w-5 h-5 text-slate-500" />
+              </div>
               Recent Records
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-4">
-                {mockTranscriptionRecords.slice(0, 3).map((record, index) => (
-                  <div key={record.id} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg hover:bg-[hsl(var(--muted))]/80 transition-colors">
-                    <div>
-                      <p className="font-medium text-sm text-foreground">{record.caseTitle}</p>
-                      <p className="text-xs text-[#0047BA] dark:text-blue-400 font-medium">Case #{record.caseNumber}</p>
+          <CardContent className="p-0">
+            <div className="divide-y divide-slate-100">
+              {mockTranscriptionRecords.slice(0, 3).map((record, index) => (
+                <div key={record.id} className="flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors group">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 font-bold text-xs group-hover:bg-blue-50 group-hover:text-[#0047BB] transition-colors">
+                      {record.caseTitle.charAt(0)}
                     </div>
-                    <div className="text-right">
-                      <Badge className={`${index === 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' :
-                        index === 1 ? 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200' :
-                          'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200'
-                        } mb-1`}>
-                        {index === 0 ? 'Complete' : index === 1 ? 'Processing' : 'Review'}
-                      </Badge>
-                      <p className="text-xs text-muted-foreground">
-                        {index === 0 ? record.duration : index === 1 ? 'Est. 30m' : 'Pending'}
-                      </p>
+                    <div>
+                      <p className="font-bold text-sm text-slate-900">{record.caseTitle}</p>
+                      <p className="text-xs text-[#0047BB] font-medium mt-0.5">Case #{record.caseNumber}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="text-right">
+                    <Badge className={`${index === 0 ? 'bg-emerald-100 text-emerald-800' :
+                      index === 1 ? 'bg-cyan-100 text-cyan-800' :
+                        'bg-amber-100 text-amber-800'
+                      } mb-1 border-none shadow-none`}>
+                      {index === 0 ? 'Complete' : index === 1 ? 'Processing' : 'Review'}
+                    </Badge>
+                    <p className="text-xs text-slate-400 font-medium">
+                      {index === 0 ? record.duration : index === 1 ? 'Est. 30m' : 'Pending'}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl">
-              <Users className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+        <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-2xl overflow-hidden">
+          <CardHeader className="pb-4 bg-white border-b border-slate-50">
+            <CardTitle className="flex items-center gap-3 text-xl font-bold text-slate-800">
+              <div className="p-2 bg-slate-50 rounded-lg">
+                <Users className="w-5 h-5 text-slate-500" />
+              </div>
               Courtroom Status
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg">
-                <span className="text-sm font-medium">Courtroom 1A</span>
-                <Badge className="bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200">Standby</Badge>
+          <CardContent className="p-0">
+            <div className="divide-y divide-slate-100">
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                <span className="text-sm font-bold text-slate-700">Courtroom 1A</span>
+                <Badge variant="outline" className="bg-slate-50 text-slate-500 border-slate-200">Standby</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg">
-                <span className="text-sm font-medium">Courtroom 2B</span>
-                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">Active</Badge>
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                <span className="text-sm font-bold text-slate-900">Courtroom 2B</span>
+                <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none shadow-none">Active</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg">
-                <span className="text-sm font-medium">Courtroom 3A</span>
-                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">Active</Badge>
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                <span className="text-sm font-bold text-slate-900">Courtroom 3A</span>
+                <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none shadow-none">Active</Badge>
               </div>
-              <div className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg">
-                <span className="text-sm font-medium">Courtroom 4B</span>
-                <Badge className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200">Maintenance</Badge>
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                <span className="text-sm font-bold text-slate-700">Courtroom 4B</span>
+                <Badge className="bg-rose-100 text-rose-700 hover:bg-rose-100 border-none shadow-none">Maintenance</Badge>
               </div>
             </div>
           </CardContent>
@@ -235,17 +258,20 @@ const ClerkDashboardHome = () => {
       </div>
 
       {/* Judicial Advisory Notice */}
-      <Card className="court-card border-l-amber-500/80 bg-card mb-8">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-3 text-xl text-foreground">
-            <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-500" />
+      {/* Judicial Advisory Notice */}
+      <Card className="bg-white border-none shadow-lg shadow-slate-200/60 rounded-2xl overflow-hidden mb-8 border-l-4 border-l-amber-500">
+        <CardHeader className="pb-4 bg-white border-b border-slate-50">
+          <CardTitle className="flex items-center gap-3 text-xl font-bold text-slate-800">
+            <div className="p-2 bg-amber-50 rounded-lg">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
             Judicial Advisory Notice
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-6">
-            <p className="text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
-              <strong className="font-semibold text-amber-900 dark:text-amber-100">Advisory Only:</strong> This AI-powered transcription and record management system provides automated drafts for efficiency. All transcripts must be certified by an official court reporter and reviewed for accuracy against the official audio record before becoming part of the permanent judicial record. Automated outputs are tools to assist, not replace, certified verification.
+        <CardContent className="p-6">
+          <div className="bg-amber-50 rounded-xl border border-amber-100 p-5">
+            <p className="text-base text-slate-700 leading-relaxed">
+              <strong className="font-bold text-amber-700">Advisory Only:</strong> This AI-powered transcription and record management system provides automated drafts for efficiency. All transcripts must be certified by an official court reporter and reviewed for accuracy against the official audio record before becoming part of the permanent judicial record. Automated outputs are tools to assist, not replace, certified verification.
             </p>
           </div>
         </CardContent>

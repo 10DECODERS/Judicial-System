@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-type Role = 'judge' | 'clerk' | null;
+type Role = 'judge' | 'clerk' | 'admin' | null;
 
 interface User {
   username: string;

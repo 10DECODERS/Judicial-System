@@ -11,6 +11,7 @@ import ClerkDashboard from "./pages/ClerkDashboard";
 import { Layout } from "./components/Layout";
 
 import Settings from "./pages/Settings";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,16 @@ const ProtectedRoute = ({ children, allowedRole }: { children: React.ReactNode; 
 
   if (user.role !== allowedRole) {
     return <Navigate to={`/${user.role}`} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const AuthenticatedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
@@ -58,6 +69,25 @@ const App = () => (
                       <ClerkDashboard />
                     </DocumentProvider>
                   </ProtectedRoute>
+                }
+              />
+            </Route>
+
+            <Route element={<Layout />}>
+              <Route
+                path="/settings"
+                element={
+                  <AuthenticatedRoute>
+                    <Settings />
+                  </AuthenticatedRoute>
+                }
+              />
+              <Route
+                path="/support"
+                element={
+                  <AuthenticatedRoute>
+                    <Support />
+                  </AuthenticatedRoute>
                 }
               />
             </Route>

@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { 
-  ArrowLeft, 
-  Bookmark, 
-  Share2, 
-  Printer, 
+import {
+  ArrowLeft,
+  Bookmark,
+  Share2,
+  Printer,
   MessageCircle,
   Send,
-  X
+  X,
+  ChevronRight
 } from 'lucide-react';
 
 interface CaseData {
@@ -67,9 +68,9 @@ export default function CaseDetailPage() {
   const [caseData] = useState<CaseData>(mockCaseData);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { 
-      role: 'assistant', 
-      content: `I'm your AI legal assistant for ${caseData.title}. Ask me anything about this case, its holdings, or related precedents.` 
+    {
+      role: 'assistant',
+      content: `I'm your AI legal assistant for ${caseData.title}. Ask me anything about this case, its holdings, or related precedents.`
     }
   ]);
   const [input, setInput] = useState('');
@@ -92,45 +93,35 @@ export default function CaseDetailPage() {
   };
 
   return (
-    <div className="h-full bg-[hsl(var(--main-bg))] p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/judge/research')}
-          className="mb-4 -ml-2"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Search
-        </Button>
-
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h1 className="text-3xl font-display font-semibold text-headings mb-2">
-              {caseData.title}
-            </h1>
-            <p className="text-lg text-body mb-2">{caseData.citation}</p>
-            <div className="flex items-center gap-4 text-sm text-body">
-              <span>{caseData.court}</span>
-              <span>•</span>
-              <span>{caseData.date}</span>
-              <Badge className="ml-2 bg-accent/10 text-accent border-accent/20">
-                Relevance: {caseData.relevance}%
-              </Badge>
-            </div>
+    <div className="h-full bg-background p-8 animate-fade-in max-w-[1600px] mx-auto">
+      {/* Header Area */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-8">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Legal Research Assistant</h1>
+          <div className="flex items-center text-sm font-medium gap-2">
+            <Link to="/judge" className="text-primary hover:underline cursor-pointer">Dashboard</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <Link to="/judge/research" className="text-primary hover:underline cursor-pointer">Legal Research</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-500 font-semibold truncate max-w-[300px]">{caseData.title}</span>
           </div>
-
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" className="h-10 border-slate-200 bg-white text-slate-600 font-medium px-4 shadow-sm" onClick={() => navigate('/judge/research')}>
+            Back to Search
+          </Button>
+          <div className="h-8 w-px bg-slate-200 mx-2" />
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="border-borders">
-              <Bookmark className="w-4 h-4 mr-2" />
+            <Button variant="outline" size="sm" className="h-10 border-slate-200 bg-white shadow-sm text-slate-600 font-medium">
+              <Bookmark className="w-4 h-4 mr-2 text-slate-400" />
               Bookmark
             </Button>
-            <Button variant="outline" size="sm" className="border-borders">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share to Clerk
+            <Button variant="outline" size="sm" className="h-10 border-slate-200 bg-white shadow-sm text-slate-600 font-medium">
+              <Share2 className="w-4 h-4 mr-2 text-slate-400" />
+              Share
             </Button>
-            <Button variant="outline" size="sm" className="border-borders">
-              <Printer className="w-4 h-4 mr-2" />
+            <Button variant="outline" size="sm" className="h-10 border-slate-200 bg-white shadow-sm text-slate-600 font-medium">
+              <Printer className="w-4 h-4 mr-2 text-slate-400" />
               Print
             </Button>
           </div>
@@ -196,10 +187,10 @@ export default function CaseDetailPage() {
                       <div className="bg-accent/5 border-l-4 border-accent p-4 rounded">
                         <p className="text-sm font-semibold text-accent mb-2">AI-Generated Summary</p>
                         <p className="text-sm text-body leading-relaxed">
-                          This case establishes a critical precedent in contract law regarding force majeure clauses. 
-                          The court's decision emphasizes foreseeability as a key factor in determining enforceability 
-                          of contractual obligations during unexpected events. The ruling has significant implications 
-                          for commercial disputes and has been widely cited in subsequent cases dealing with contract 
+                          This case establishes a critical precedent in contract law regarding force majeure clauses.
+                          The court's decision emphasizes foreseeability as a key factor in determining enforceability
+                          of contractual obligations during unexpected events. The ruling has significant implications
+                          for commercial disputes and has been widely cited in subsequent cases dealing with contract
                           interpretation and performance excuses.
                         </p>
                       </div>
@@ -246,11 +237,10 @@ export default function CaseDetailPage() {
                     className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-lg px-4 py-3 ${
-                        message.role === 'user'
+                      className={`max-w-[85%] rounded-lg px-4 py-3 ${message.role === 'user'
                           ? 'bg-accent text-white'
                           : 'bg-[hsl(var(--main-bg))] border border-borders'
-                      }`}
+                        }`}
                     >
                       <p className={`text-sm leading-relaxed ${message.role === 'assistant' ? 'text-body' : ''}`}>{message.content}</p>
                     </div>
@@ -268,7 +258,7 @@ export default function CaseDetailPage() {
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   className="flex-1 bg-[hsl(var(--search-bg))] border-borders"
                 />
-                <Button 
+                <Button
                   onClick={handleSendMessage}
                   size="icon"
                   className="bg-accent hover:bg-[hsl(var(--button-hover))] text-white"
