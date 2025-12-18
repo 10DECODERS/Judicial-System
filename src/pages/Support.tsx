@@ -14,7 +14,11 @@ import {
     Phone,
     Send,
     CheckCircle2,
-    AlertCircle
+    AlertCircle,
+    Key,
+    RefreshCw,
+    Download,
+    Database
 } from 'lucide-react';
 
 const Support = () => {
@@ -156,38 +160,71 @@ const Support = () => {
 
                     {/* FAQ Tab */}
                     <TabsContent value="faq">
-                        <Card className="court-card">
+                        <Card className="court-card border-none shadow-md">
                             <CardHeader>
                                 <CardTitle className="text-headings">Frequently Asked Questions</CardTitle>
                                 <CardDescription>Find answers to common questions about the Judicial System</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <Accordion type="single" collapsible className="w-full">
-                                    <AccordionItem value="item-1">
-                                        <AccordionTrigger>How do I reset my password?</AccordionTrigger>
-                                        <AccordionContent className="text-body">
-                                            You can reset your password by going to Settings {'>'} Security {'>'} Change Password. If you cannot log in, please contact the IT Helpdesk for a temporary password reset.
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-2">
-                                        <AccordionTrigger>How do I update case status?</AccordionTrigger>
-                                        <AccordionContent className="text-body">
-                                            Navigate to the specific case detail page. In the Actions menu or Status panel, you can select the new status. Changes are logged automatically in the audit trail.
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-3">
-                                        <AccordionTrigger>Where can I find transcript exports?</AccordionTrigger>
-                                        <AccordionContent className="text-body">
-                                            In the Transcripts module, select the desired transcript. Use the 'Export' button in the toolbar to download as PDF or Word document.
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-4">
-                                        <AccordionTrigger>Is the legal research database updated in real-time?</AccordionTrigger>
-                                        <AccordionContent className="text-body">
-                                            Yes, the legal research database is synchronized with the central repository every 15 minutes to ensure you have access to the latest precedents and statutes.
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
+                                <div className="grid gap-4">
+                                    <Accordion type="single" collapsible className="w-full space-y-3">
+                                        <AccordionItem value="item-1" className="bg-slate-50/50 border border-slate-100 rounded-lg px-4 hover:bg-slate-50 transition-colors">
+                                            <AccordionTrigger className="hover:no-underline py-4">
+                                                <div className="flex items-center gap-3 text-left">
+                                                    <div className="p-2 bg-blue-100 text-blue-600 rounded-md">
+                                                        <Key className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="font-semibold text-slate-700">How do I reset my password?</span>
+                                                </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent className="text-slate-600 pl-[52px] pb-4">
+                                                You can reset your password by going to Settings {'>'} Security {'>'} Change Password. If you cannot log in, please contact the IT Helpdesk for a temporary password reset.
+                                            </AccordionContent>
+                                        </AccordionItem>
+
+                                        <AccordionItem value="item-2" className="bg-slate-50/50 border border-slate-100 rounded-lg px-4 hover:bg-slate-50 transition-colors">
+                                            <AccordionTrigger className="hover:no-underline py-4">
+                                                <div className="flex items-center gap-3 text-left">
+                                                    <div className="p-2 bg-emerald-100 text-emerald-600 rounded-md">
+                                                        <RefreshCw className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="font-semibold text-slate-700">How do I update case status?</span>
+                                                </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent className="text-slate-600 pl-[52px] pb-4">
+                                                Navigate to the specific case detail page. In the Actions menu or Status panel, you can select the new status. Changes are logged automatically in the audit trail.
+                                            </AccordionContent>
+                                        </AccordionItem>
+
+                                        <AccordionItem value="item-3" className="bg-slate-50/50 border border-slate-100 rounded-lg px-4 hover:bg-slate-50 transition-colors">
+                                            <AccordionTrigger className="hover:no-underline py-4">
+                                                <div className="flex items-center gap-3 text-left">
+                                                    <div className="p-2 bg-purple-100 text-purple-600 rounded-md">
+                                                        <Download className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="font-semibold text-slate-700">Where can I find transcript exports?</span>
+                                                </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent className="text-slate-600 pl-[52px] pb-4">
+                                                In the Transcripts module, select the desired transcript. Use the 'Export' button in the toolbar to download as PDF or Word document.
+                                            </AccordionContent>
+                                        </AccordionItem>
+
+                                        <AccordionItem value="item-4" className="bg-slate-50/50 border border-slate-100 rounded-lg px-4 hover:bg-slate-50 transition-colors">
+                                            <AccordionTrigger className="hover:no-underline py-4">
+                                                <div className="flex items-center gap-3 text-left">
+                                                    <div className="p-2 bg-amber-100 text-amber-600 rounded-md">
+                                                        <Database className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="font-semibold text-slate-700">Is the legal research database updated in real-time?</span>
+                                                </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent className="text-slate-600 pl-[52px] pb-4">
+                                                Yes, the legal research database is synchronized with the central repository every 15 minutes to ensure you have access to the latest precedents and statutes.
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+                                </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
