@@ -80,7 +80,7 @@ export const Sidebar = ({ isCollapsed }: SidebarProps) => {
           </div>
           <div className={cn("flex flex-col transition-opacity duration-300", isCollapsed ? "opacity-0 w-0" : "opacity-100")}>
             <span className="font-bold text-xl leading-none tracking-tight text-white">Judicial AI</span>
-            <span className="text-[10px] text-white/80 font-medium tracking-wide">Systems</span>
+            <span className="text-[10px] text-white/80 font-medium tracking-wide">Suite</span>
           </div>
         </div>
       </div>

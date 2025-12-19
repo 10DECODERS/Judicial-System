@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 type Role = 'judge' | 'clerk';
 
 const Login = () => {
-  const [username, setUsername] = useState('hon. justice');
+  const [username, setUsername] = useState('Hon. Al Mansouri');
   const [password, setPassword] = useState('justice2025');
   const [role, setRole] = useState<Role>('judge');
   const { login } = useAuth();
@@ -79,7 +79,7 @@ const Login = () => {
                   setRole(value as Role);
                   // Auto-fill credentials based on role
                   if (value === 'judge') {
-                    setUsername('hon. justice');
+                    setUsername('Hon. Al Mansouri');
                     setPassword('justice2025');
                   } else if (value === 'clerk') {
                     setUsername('Fatima Al-Zahra');
