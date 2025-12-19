@@ -58,10 +58,15 @@ const Settings = () => {
 
           {/* Profile Tab */}
           <TabsContent value="profile">
-            <Card className="court-card">
-              <CardHeader>
-                <CardTitle className="text-headings">Profile Information</CardTitle>
-                <CardDescription>Update your personal details</CardDescription>
+            <Card className="court-card border-none shadow-md">
+              <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6">
+                <div className="p-3 bg-blue-50 rounded-xl">
+                  <User className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-headings text-lg">Profile Information</CardTitle>
+                  <CardDescription>Update your personal details</CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-4 mb-6">
@@ -103,11 +108,16 @@ const Settings = () => {
 
           {/* Security Tab */}
           <TabsContent value="security">
-            <div className="space-y-4">
-              <Card className="court-card">
-                <CardHeader>
-                  <CardTitle className="text-headings">Change Password</CardTitle>
-                  <CardDescription>Update your password regularly for security</CardDescription>
+            <div className="space-y-6">
+              <Card className="court-card border-none shadow-md">
+                <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6">
+                  <div className="p-3 bg-emerald-50 rounded-xl">
+                    <Shield className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-headings text-lg">Change Password</CardTitle>
+                    <CardDescription>Update your password regularly for security</CardDescription>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-2">
@@ -126,10 +136,15 @@ const Settings = () => {
                 </CardContent>
               </Card>
 
-              <Card className="court-card">
-                <CardHeader>
-                  <CardTitle className="text-headings">Two-Factor Authentication</CardTitle>
-                  <CardDescription>Add an extra layer of security</CardDescription>
+              <Card className="court-card border-none shadow-md">
+                <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6">
+                  <div className="p-3 bg-emerald-50 rounded-xl">
+                    <Shield className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-headings text-lg">Two-Factor Authentication</CardTitle>
+                    <CardDescription>Add an extra layer of security</CardDescription>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -146,10 +161,15 @@ const Settings = () => {
 
           {/* Theme Tab */}
           <TabsContent value="theme">
-            <Card className="court-card">
-              <CardHeader>
-                <CardTitle className="text-headings">Appearance Settings</CardTitle>
-                <CardDescription>Customize the look and feel of your interface</CardDescription>
+            <Card className="court-card border-none shadow-md">
+              <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6">
+                <div className="p-3 bg-purple-50 rounded-xl">
+                  <Palette className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-headings text-lg">Appearance Settings</CardTitle>
+                  <CardDescription>Customize the look and feel of your interface</CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -193,10 +213,15 @@ const Settings = () => {
 
           {/* Notifications Tab */}
           <TabsContent value="notifications">
-            <Card className="court-card">
-              <CardHeader>
-                <CardTitle className="text-headings">Notification Preferences</CardTitle>
-                <CardDescription>Manage how you receive updates</CardDescription>
+            <Card className="court-card border-none shadow-md">
+              <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-6">
+                <div className="p-3 bg-amber-50 rounded-xl">
+                  <Bell className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-headings text-lg">Notification Preferences</CardTitle>
+                  <CardDescription>Manage how you receive updates</CardDescription>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">

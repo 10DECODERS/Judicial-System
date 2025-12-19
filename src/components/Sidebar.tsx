@@ -75,11 +75,11 @@ export const Sidebar = ({ isCollapsed }: SidebarProps) => {
       {/* Logo Area */}
       <div className="h-[72px] flex items-center px-6 bg-primary border-b border-white/10">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
-            <img src="/judicial-removebg-preview.png" alt="Logo" className="w-6 h-6 object-contain brightness-0 invert" />
+          <div className="flex items-center justify-center flex-shrink-0">
+            <img src="/logo.png" alt="Logo" className="w-auto h-12 object-contain" />
           </div>
           <div className={cn("flex flex-col transition-opacity duration-300", isCollapsed ? "opacity-0 w-0" : "opacity-100")}>
-            <span className="font-bold text-xl leading-none tracking-tight text-white">Judicial</span>
+            <span className="font-bold text-xl leading-none tracking-tight text-white">Judicial AI</span>
             <span className="text-[10px] text-white/80 font-medium tracking-wide">Systems</span>
           </div>
         </div>

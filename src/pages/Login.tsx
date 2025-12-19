@@ -60,12 +60,12 @@ const Login = () => {
       <div className="absolute inset-0 justice-pattern pointer-events-none" />
 
       <Card className="w-full max-w-md shadow-2xl border-t-4 border-t-accent relative z-10 glass-card">
-        <CardHeader className="text-center space-y-4 pb-8">
-          <div className="flex justify-center mb-4">
-            <img src="/judicial-removebg-preview.png" alt="Judicial System Logo" className="w-20 h-20 object-contain" />
+        <CardHeader className="text-center pb-8">
+          <div className="flex justify-center mb-0">
+            <img src="/logo_login.png" alt="Judicial System Logo" className="w-auto h-auto object-contain" />
           </div>
           <CardTitle className="text-4xl font-display text-foreground">Judicial AI Suite</CardTitle>
-          <CardDescription className="text-base text-muted-foreground">
+          <CardDescription className="text-base text-muted-foreground mt-6">
             Secure Court Management Technology
           </CardDescription>
         </CardHeader>
